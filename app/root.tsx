@@ -10,7 +10,6 @@ import {
 } from "@remix-run/react";
 import stylesheet from "~/styles/app.css";
 import "flowbite";
-import Header from "~/components/Header";
 import { useEffect } from "react";
 
 export const links: LinksFunction = () => [
@@ -49,8 +48,6 @@ export default function App() {
         <title></title>
       </head>
       <body className="text-gray-600 text-[14px]">
-        <Header />
-        <div className="w-full mt-5" />
         <Outlet />
         <ScrollRestoration />
         <Scripts />
