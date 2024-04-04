@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 
 function Button({
   label,
@@ -7,14 +7,16 @@ function Button({
   preIcon,
   postIcon,
   className = "",
-}: {
+  onClick,
+}: Readonly<{
   label: string;
   type: "button" | "submit" | "reset";
   style?: "primary" | "secondary" | "light";
   preIcon?: React.ReactElement;
   postIcon?: React.ReactElement;
   className?: string;
-}) {
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+}>) {
   const styled = () => {
     switch (style) {
       case "primary":
@@ -28,7 +30,8 @@ function Button({
   return (
     <button
       type={type}
-      className={`h-8 px-5 rounded-lg cursor-pointer flex justify-center items-center min-w-max ${styled()} ${className}`}
+      className={`rounded-3xl py-3 px-5 cursor-pointer flex justify-center items-center min-w-max ${styled()} ${className}`}
+      onClick={onClick}
     >
       {preIcon ?? null} <span>{label}</span> {postIcon ?? null}
     </button>
