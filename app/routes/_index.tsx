@@ -1,31 +1,20 @@
-import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import createDBClient from "~/utils/supabase/server";
-import EventItem from "~/components/EventItem";
-
-export async function loader(args: LoaderFunctionArgs) {
-  const dbClient = createDBClient();
-
-  const {
-    data: events,
-    error,
-    count,
-  } = await dbClient
-    .from("events")
-    .select("*, categories(id, name), users(id, name), tickets(count)");
-  return json({ events, error, count });
-}
+import { Link } from "@remix-run/react";
 
 export default function Index() {
-  const { events, count, error } = useLoaderData<typeof loader>();
   return (
-    <div className="px-5">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 max-w-screen-xl mx-auto">
-        {events?.map((item) => (
-          // @ts-expect-error Insufficient type covered by supabase client
-          <EventItem item={item} key={item.id} />
-        ))}
-      </div>
+    <div>
+      <h1>Hello to EventsBooking</h1>
+      <ul>
+        <li>
+          <Link to="/events">Events</Link>
+        </li>
+        <li>
+          <Link to="/login">Login</Link>
+        </li>
+        <li>
+          <Link to="/register">Register</Link>
+        </li>
+      </ul>
     </div>
   );
 }
