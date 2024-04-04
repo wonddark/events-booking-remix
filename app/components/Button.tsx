@@ -20,7 +20,7 @@ function Button({
   const styled = () => {
     switch (style) {
       case "primary":
-        return "bg-primary-300 border border-primary-500 text-slate-700 hover:bg-primary-400";
+        return "bg-primary-600 border border-primary-500 text-white hover:brightness-110";
       case "secondary":
         return "bg-secondary-100 border border-secondary-300 text-gray-800 hover:bg-white";
       default:
@@ -30,7 +30,7 @@ function Button({
   return (
     <button
       type={type}
-      className={`rounded-3xl py-3 px-5 cursor-pointer flex justify-center items-center min-w-max ${styled()} ${className}`}
+      className={`rounded-md py-1.5 px-3.5 cursor-pointer flex justify-center items-center min-w-max ${styled()} ${className}`}
       onClick={onClick}
     >
       {preIcon ?? null} <span>{label}</span> {postIcon ?? null}
