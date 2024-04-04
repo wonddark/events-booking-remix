@@ -28,7 +28,7 @@ function Header() {
         <div className="flex gap-x-2 grow-0 order-2 md:order-last">
           <Button label="Login" type="button" onClick={goLogin} />
           <Button
-            label="Post an event"
+            label="Create event"
             type="button"
             style="primary"
             onClick={goRegister}
