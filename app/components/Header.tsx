@@ -1,10 +1,23 @@
 import Button from "~/components/Button";
+import { Link, useNavigate } from "@remix-run/react";
 
 function Header() {
+  const navigate = useNavigate();
+
+  const goLogin = () => {
+    navigate("/login");
+  };
+
+  const goRegister = () => {
+    navigate("/register");
+  };
+
   return (
     <header className="px-5 py-3 border-b border-b-gray-200">
       <div className="max-w-screen-xl mx-auto flex items-center flex-wrap md:flex-nowrap justify-between md:justify-start">
-        <span className="grow-0 order-1">EB</span>
+        <Link to="/" className="grow-0 order-1">
+          EB
+        </Link>
         <div className="grow md:pl-5 md:pr-20 order-last md:order-2 w-full mt-3 md:mt-0">
           <input
             type="search"
@@ -13,8 +26,13 @@ function Header() {
           />
         </div>
         <div className="flex gap-x-2 grow-0 order-2 md:order-last">
-          <Button label="Login" type="button" />
-          <Button label="Post an event" type="button" style="primary" />
+          <Button label="Login" type="button" onClick={goLogin} />
+          <Button
+            label="Post an event"
+            type="button"
+            style="primary"
+            onClick={goRegister}
+          />
         </div>
       </div>
     </header>
