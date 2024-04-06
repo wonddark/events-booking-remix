@@ -38,7 +38,7 @@ export default {
     },
     fontFamily: {
       body: [
-        "Inter",
+        "Montserrat",
         "ui-sans-serif",
         "system-ui",
         "-apple-system",
@@ -55,7 +55,7 @@ export default {
         "Noto Color Emoji",
       ],
       sans: [
-        "Inter",
+        "Montserrat",
         "ui-sans-serif",
         "system-ui",
         "-apple-system",
