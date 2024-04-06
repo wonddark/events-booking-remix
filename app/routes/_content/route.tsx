@@ -6,7 +6,9 @@ function ContentLayout() {
     <>
       <Header />
       <div className="w-full mt-5" />
-      <Outlet />
+      <div className="max-w-screen-xl mx-auto">
+        <Outlet />
+      </div>
     </>
   );
 }
