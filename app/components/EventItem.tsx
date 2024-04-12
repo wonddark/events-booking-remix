@@ -17,17 +17,17 @@ function EventItem({
     navigate(`/events/${item.id}`);
   };
   return (
-    <div className="flex flex-col border border-gray-300 rounded-lg shadow-md hover:shadow p-3">
+    <div className="flex flex-col border border-gray-300 rounded-lg shadow-md hover:shadow p-3 md:w-[280px]">
       <div className="-m-3 mb-0">
         <Link to={`/events/${item.id}`}>
           <img
             src={item.img_url ?? ""}
             alt="event_img"
-            className="w-full h-[300px] rounded-lg rounded-b-[0] object-cover hover:brightness-105"
+            className="w-full h-[240px] rounded-lg rounded-b-[0] object-cover hover:brightness-105"
           />
         </Link>
       </div>
-      <h3 className="text-lg font-bold mt-3">{item.name}</h3>
+      <h3 className="font-bold mt-3">{item.name}</h3>
       <div className="mt-7 flex-1 grid grid-cols-1 items-end">
         <Button
           label="Details"
