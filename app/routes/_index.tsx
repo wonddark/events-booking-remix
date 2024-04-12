@@ -121,32 +121,32 @@ export default function Index() {
 
       <section className="max-w-screen-2xl mx-auto px-2.5 lg:px-5 py-11 flex flex-col md:flex-row gap-5 justify-around items-center flex-wrap">
         <div className="text-center">
-          <h1 className="text-xl md:text-3xl text-white font-light">
-            Running now
-          </h1>
-          <div className="mt-3 md:mt-7">
+          <div className="mb-3 md:mt-7">
             <span className="text-5xl md:text-8xl text-white">
               {current ?? 0}
             </span>
           </div>
+          <h1 className="text-xl md:text-3xl text-white font-light">
+            Running now
+          </h1>
         </div>
         <div className="text-center">
+          <div className="mb-3 md:mt-7">
+            <span className="text-5xl md:text-8xl text-white">{soon ?? 0}</span>
+          </div>
           <h1 className="text-xl md:text-3xl text-white font-light">
             Starting soon
           </h1>
-          <div className="mt-3 md:mt-7">
-            <span className="text-5xl md:text-8xl text-white">{soon ?? 0}</span>
-          </div>
         </div>
         <div className="text-center">
-          <h1 className="text-xl md:text-3xl text-white font-light">
-            Recently posted
-          </h1>
-          <div className="mt-3 md:mt-7">
+          <div className="mb-3 md:mt-7">
             <span className="text-5xl md:text-8xl text-white">
               {recent ?? 0}
             </span>
           </div>
+          <h1 className="text-xl md:text-3xl text-white font-light">
+            Recently posted
+          </h1>
         </div>
         <div className="w-full text-center mt-5">
           <Link
