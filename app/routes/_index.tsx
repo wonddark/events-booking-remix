@@ -1,7 +1,38 @@
-import { Link } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import EventSVG from "~/assets/EventSVG";
+import createDBClient from "~/utils/supabase/server";
+import dayjs from "dayjs";
+import ArrowRight from "~/assets/ArrowRight";
+
+export async function loader() {
+  const dbClient = createDBClient();
+  const today = dayjs().format("YYYY-MM-DD HH:mm:ss.sss");
+  const { data: recent } = await dbClient
+    .from("events")
+    .select("count")
+    .gt(
+      "published_at",
+      dayjs().subtract(72, "hours").format("YYYY-MM-DD HH:mm:ss.sss")
+    );
+  const { data: current } = await dbClient
+    .from("events")
+    .select("count")
+    .lt("start_date", today)
+    .gt("end_date", today);
+  const { data: soon } = await dbClient
+    .from("events")
+    .select("count")
+    .gt("start_date", today);
+
+  return {
+    recent: recent?.[0].count,
+    current: current?.[0].count,
+    soon: soon?.[0].count,
+  };
+}
 
 export default function Index() {
+  const { recent, current, soon } = useLoaderData<typeof loader>();
   return (
     <>
       <header className="bg-gradient-to-br from-[#c47b05ff] to-[#ffb933ff]">
@@ -15,7 +46,7 @@ export default function Index() {
                 <li>
                   <Link
                     to="/login"
-                    className="rounded flex justify-center items-center h-7 px-5 text-white font-bold hover:brightness-95"
+                    className="rounded flex justify-center items-center px-4 py-2 text-white font-bold hover:brightness-95"
                   >
                     Login
                   </Link>
@@ -23,7 +54,7 @@ export default function Index() {
                 <li>
                   <Link
                     to="/register"
-                    className="rounded flex justify-center items-center h-7 px-5 bg-white text-primary-800 hover:brightness-95"
+                    className="rounded flex justify-center items-center px-4 py-2 bg-white text-primary-800 hover:brightness-95"
                   >
                     Create event
                   </Link>
@@ -41,20 +72,89 @@ export default function Index() {
                 create, share and even monetize categorized, tagged and fully
                 customizable events.
               </h2>
-              <input
-                type="search"
-                className="h-[37px] w-full rounded-2xl border-primary-200"
-              />
+
+              <form className="">
+                <label
+                  htmlFor="default-search"
+                  className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+                >
+                  Search
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg
+                      className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                      />
+                    </svg>
+                  </div>
+                  <input
+                    type="search"
+                    id="default-search"
+                    className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500"
+                    placeholder="Search Mockups, Logos..."
+                    required
+                  />
+                  <button
+                    type="submit"
+                    className="text-white absolute end-2.5 bottom-2.5 bg-primary-700 hover:bg-primary-800 focus:ring-0 focus:outline-none font-medium rounded-lg text-sm px-4 py-2"
+                  >
+                    Search
+                  </button>
+                </div>
+              </form>
             </div>
             <div className="flex-1 w-full md:max-w-[45%] order-first md:order-last">
               <EventSVG className="w-full h-auto" />
             </div>
           </div>
         </div>
+
+        <section className="max-w-screen-2xl mx-auto px-2.5 lg:px-5 py-11 flex flex-col md:flex-row gap-5 justify-around items-center flex-wrap">
+          <div className="text-center">
+            <h1 className="text-xl md:text-3xl text-white font-light">
+              Running now
+            </h1>
+            <div className="mt-3 md:mt-7">
+              <span className="text-5xl md:text-8xl text-white">{current}</span>
+            </div>
+          </div>
+          <div className="text-center">
+            <h1 className="text-xl md:text-3xl text-white font-light">
+              Starting soon
+            </h1>
+            <div className="mt-3 md:mt-7">
+              <span className="text-5xl md:text-8xl text-white">{soon}</span>
+            </div>
+          </div>
+          <div className="text-center">
+            <h1 className="text-xl md:text-3xl text-white font-light">
+              Recently posted
+            </h1>
+            <div className="mt-3 md:mt-7">
+              <span className="text-5xl md:text-8xl text-white">{recent}</span>
+            </div>
+          </div>
+          <div className="w-full text-center mt-5">
+            <Link
+              to="/events"
+              className="text-lg md:text-2xl hover:brightness-125 inline-flex gap-3 items-center text-white"
+            >
+              See the full list of events <ArrowRight />
+            </Link>
+          </div>
+        </section>
       </header>
-      <section className="max-w-screen-2xl mx-auto px-2.5 lg:px-5 pt-5">
-        <h1>Welcome to EventsBooking</h1>
-      </section>
     </>
   );
 }
