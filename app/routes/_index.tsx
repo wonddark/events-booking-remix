@@ -126,7 +126,9 @@ export default function Index() {
               Running now
             </h1>
             <div className="mt-3 md:mt-7">
-              <span className="text-5xl md:text-8xl text-white">{current}</span>
+              <span className="text-5xl md:text-8xl text-white">
+                {current ?? 0}
+              </span>
             </div>
           </div>
           <div className="text-center">
@@ -134,7 +136,9 @@ export default function Index() {
               Starting soon
             </h1>
             <div className="mt-3 md:mt-7">
-              <span className="text-5xl md:text-8xl text-white">{soon}</span>
+              <span className="text-5xl md:text-8xl text-white">
+                {soon ?? 0}
+              </span>
             </div>
           </div>
           <div className="text-center">
@@ -142,7 +146,9 @@ export default function Index() {
               Recently posted
             </h1>
             <div className="mt-3 md:mt-7">
-              <span className="text-5xl md:text-8xl text-white">{recent}</span>
+              <span className="text-5xl md:text-8xl text-white">
+                {recent ?? 0}
+              </span>
             </div>
           </div>
           <div className="w-full text-center mt-5">
