@@ -1,7 +1,6 @@
 function ArrowRight(props: any) {
   return (
     <svg
-      className="fill-current"
       aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
       width="1em"
@@ -15,7 +14,7 @@ function ArrowRight(props: any) {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="2"
-        d="M19 12H5m14 0-4 4m4-4-4-4"
+        d="m10 16 4-4-4-4"
       />
     </svg>
   );
