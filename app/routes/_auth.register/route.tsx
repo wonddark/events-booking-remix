@@ -1,10 +1,34 @@
-import { MetaFunction } from "@remix-run/node";
+import { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import Button from "~/components/Button";
 import HorizontalLogo from "~/routes/_auth/HorizontalLogo";
+import createDBClient from "~/utils/supabase/server";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Register" }];
+};
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const body = await request.formData();
+  const email = body.get("email");
+  const password = body.get("password");
+
+  const dbClient = createDBClient();
+
+  if (
+    email &&
+    typeof email === "string" &&
+    password &&
+    typeof password === "string"
+  ) {
+    const { data, error } = await dbClient.auth.signUp({
+      email: email,
+      password: password,
+    });
+    return { data, error };
+  }
+
+  return { data: null, error: null };
 };
 
 function Register() {
@@ -16,7 +40,7 @@ function Register() {
       <p className="text-center md:text-left text-xl font-bold text-primary-900">
         Create account
       </p>
-      <form className="flex flex-col items-center mt-5 gap-3">
+      <form className="flex flex-col items-center mt-5 gap-3" method="POST">
         <div className="w-full">
           <label htmlFor="email">Email</label>
           <input
@@ -24,6 +48,7 @@ function Register() {
             className="rounded-lg py-1.5 px-3.5 w-full"
             placeholder="user@email.com"
             id="email"
+            name="email"
           />
         </div>
         <div className="w-full">
@@ -33,6 +58,7 @@ function Register() {
             className="rounded-lg py-1.5 px-3.5 w-full"
             placeholder="Password"
             id="password"
+            name="password"
           />
         </div>
         <div className="w-full">
