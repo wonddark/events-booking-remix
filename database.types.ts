@@ -11,71 +11,115 @@ export type Database = {
     Tables: {
       categories: {
         Row: {
-          created_at: string
-          id: number
+          id: string
           name: string
         }
         Insert: {
-          created_at?: string
-          id?: number
+          id?: string
           name: string
         }
         Update: {
-          created_at?: string
-          id?: number
+          id?: string
           name?: string
         }
         Relationships: []
       }
       events: {
         Row: {
-          category_id: number
+          category_id: string
           description: string
           end_date: string
-          id: number
+          id: string
           img_url: string | null
           max_attendees: number
           name: string
           published_at: string
           start_date: string
-          user_id: number
+          user_id: string
+          name_description: string | null
         }
         Insert: {
-          category_id?: number
+          category_id?: string
           description: string
           end_date: string
-          id?: number
+          id?: string
           img_url?: string | null
-          max_attendees?: number
+          max_attendees: number
           name: string
           published_at?: string
           start_date: string
-          user_id: number
+          user_id?: string
         }
         Update: {
-          category_id?: number
+          category_id?: string
           description?: string
           end_date?: string
-          id?: number
+          id?: string
           img_url?: string | null
           max_attendees?: number
           name?: string
           published_at?: string
           start_date?: string
-          user_id?: number
+          user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "public_events_category_id_fkey"
+            foreignKeyName: "public_Events_category_id_fkey"
             columns: ["category_id"]
             isOneToOne: false
             referencedRelation: "categories"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "public_events_user_id_fkey"
+            foreignKeyName: "public_Events_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "event_owner"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "public_Events_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar: string | null
+          display_name: string
+          first_name: string | null
+          last_name: string | null
+          user_id: string
+        }
+        Insert: {
+          avatar?: string | null
+          display_name: string
+          first_name?: string | null
+          last_name?: string | null
+          user_id: string
+        }
+        Update: {
+          avatar?: string | null
+          display_name?: string
+          first_name?: string | null
+          last_name?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_Users_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "event_owner"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "public_Users_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -83,33 +127,37 @@ export type Database = {
       }
       tickets: {
         Row: {
-          created_at: string
-          event_id: number
-          id: number
-          user_id: number
+          event_id: string
+          id: string
+          user_id: string
         }
         Insert: {
-          created_at?: string
-          event_id: number
-          id?: number
-          user_id: number
+          event_id?: string
+          id?: string
+          user_id?: string
         }
         Update: {
-          created_at?: string
-          event_id?: number
-          id?: number
-          user_id?: number
+          event_id?: string
+          id?: string
+          user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "public_tickets_event_id_fkey"
+            foreignKeyName: "public_Tickets_event_id_fkey"
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "public_tickets_user_id_fkey"
+            foreignKeyName: "public_Tickets_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "event_owner"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "public_Tickets_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
@@ -117,36 +165,28 @@ export type Database = {
           },
         ]
       }
-      users: {
+    }
+    Views: {
+      event_owner: {
         Row: {
-          created_at: string
-          email: string
-          id: number
-          name: string
-          password: string
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          id?: number
-          name: string
-          password: string
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          id?: number
-          name?: string
-          password?: string
+          avatar: string | null
+          display_name: string | null
+          first_name: string | null
+          last_name: string | null
+          user_email: string | null
+          user_id: string | null
+          user_phone: string | null
         }
         Relationships: []
       }
     }
-    Views: {
-      [_ in never]: never
-    }
     Functions: {
-      [_ in never]: never
+      name_description: {
+        Args: {
+          "": unknown
+        }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never
