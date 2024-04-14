@@ -8,7 +8,8 @@
     "dev": "remix dev --manual",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/index.js",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "supabase-types-gen": "npx supabase gen types typescript --project-id yzsqemypjxpitaraepwu > database.types.ts"
   },
   "dependencies": {
     "@remix-run/css-bundle": "^2.8.0",
@@ -21,7 +22,8 @@
     "flowbite-react": "^0.7.2",
     "isbot": "^4.1.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "supabase": "^1.153.4"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.8.0",
