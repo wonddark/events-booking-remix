@@ -7,6 +7,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useNavigation,
 } from "@remix-run/react";
 import stylesheet from "~/styles/app.css";
 import "flowbite";
@@ -25,6 +26,7 @@ export const meta: MetaFunction = () => {
 };
 
 export default function App() {
+  const navigation = useNavigation();
   useEffect(() => {
     if (localStorage) {
       if (
@@ -58,6 +60,17 @@ export default function App() {
         <title></title>
       </head>
       <body className="text-gray-600 text-[14px]">
+        {navigation.state === "loading" && (
+          <div className="absolute top-0 right-0 left-0 bottom-0 z-50 backdrop-blur-lg flex justify-center items-center bg-transparent">
+            <div className="p-48 text-primary-500">
+              <div className="lds-ripple bg-[#ffffff0a]">
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            </div>
+          </div>
+        )}
         <Outlet />
         <ScrollRestoration />
         <Scripts />
