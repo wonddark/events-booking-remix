@@ -34,10 +34,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Events() {
-  const { events, count } = useLoaderData<typeof loader>();
+  const { events } = useLoaderData<typeof loader>();
   return (
     <>
-      {count && count > 0 ? (
+      {events.length > 0 ? (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5 justify-items-center">
           {events?.map((item) => (
             // @ts-expect-error Insufficient type covered by supabase client
