@@ -3,14 +3,16 @@ import createDBClient from "~/utils/supabase/server";
 import { useLoaderData } from "@remix-run/react";
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  params.event_id;
   const dbClient = createDBClient();
   const {
     data: event,
     error,
     status,
     statusText,
-  } = await dbClient.from("events").select("*").eq("id", params.event_id!);
+  } = await dbClient
+    .from("events")
+    .select("*, categories(id, name), tickets(id, user_id), event_owner(*)")
+    .eq("id", params.event_id!);
   return { event: event?.[0], error, status, statusText };
 }
 
@@ -32,8 +34,8 @@ function ViewEvent() {
         <div className="">
           <img
             className="w-full rounded-lg"
-            src={event?.img_url || ""}
-            alt={event?.name || "event"}
+            src={event?.img_url ?? ""}
+            alt={event?.name ?? "event"}
           />
         </div>
       </div>
