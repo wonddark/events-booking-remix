@@ -17,7 +17,7 @@ function EventItem({
     navigate(`/events/${item.id}`);
   };
   return (
-    <div className="flex flex-col border border-gray-300 rounded-lg shadow-md hover:shadow p-3 md:w-[280px]">
+    <div className="flex flex-col border border-gray-300 rounded-lg shadow-md hover:shadow p-3 w-full md:w-[280px]">
       <div className="-m-3 mb-0">
         <Link to={`/events/${item.id}`}>
           <img
@@ -27,7 +27,9 @@ function EventItem({
           />
         </Link>
       </div>
-      <h3 className="font-bold mt-3">{item.name}</h3>
+      <Link to={`/events/${item.id}`} className="font-bold mt-3">
+        {item.name}
+      </Link>
       <div className="mt-7 flex-1 grid grid-cols-1 items-end">
         <Button
           label="Details"
