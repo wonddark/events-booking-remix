@@ -1,16 +1,27 @@
 import Button from "~/components/Button";
 import { Link, useNavigate } from "@remix-run/react";
+import { useEffect, useState } from "react";
 
-function Header({ query }: { query: string | null }) {
+function Header({ query }: Readonly<{ query: string | null }>) {
   const navigate = useNavigate();
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const goLogin = () => {
     navigate("/login");
   };
 
   const goRegister = () => {
-    navigate("/register");
+    if (loggedIn) {
+      navigate("/create");
+    } else {
+      navigate("/register");
+    }
   };
+
+  useEffect(() => {
+    const isLoggedIn = Boolean(localStorage.getItem("session"));
+    setLoggedIn(isLoggedIn);
+  }, []);
 
   return (
     <header className="border-b border-b-gray-200">
@@ -49,13 +60,16 @@ function Header({ query }: { query: string | null }) {
           </form>
         </div>
         <div className="flex gap-x-2 grow-0 order-2 md:order-last">
-          <Button label="Login" type="button" onClick={goLogin} />
+          {!loggedIn && (
+            <Button label="Login" type="button" onClick={goLogin} />
+          )}
           <Button
             label="Create event"
             type="button"
             style="primary"
             onClick={goRegister}
           />
+          {loggedIn && <Button label="Profile" type="button" />}
         </div>
       </div>
     </header>
