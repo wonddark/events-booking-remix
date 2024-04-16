@@ -10,9 +10,9 @@ function Header({ query }: Readonly<{ query: string | null }>) {
     navigate("/login");
   };
 
-  const goRegister = () => {
+  const createEvent = () => {
     if (loggedIn) {
-      navigate("/create");
+      navigate("/events/create");
     } else {
       navigate("/register");
     }
@@ -67,7 +67,7 @@ function Header({ query }: Readonly<{ query: string | null }>) {
             label="Create event"
             type="button"
             style="primary"
-            onClick={goRegister}
+            onClick={createEvent}
           />
           {loggedIn && <Button label="Profile" type="button" />}
         </div>
