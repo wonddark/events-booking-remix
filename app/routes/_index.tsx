@@ -3,6 +3,7 @@ import EventSVG from "~/assets/EventSVG";
 import createDBClient from "~/utils/supabase/server";
 import dayjs from "dayjs";
 import ArrowRight from "~/assets/ArrowRight";
+import Button from "../components/Button";
 
 export async function loader() {
   const dbClient = createDBClient();
@@ -106,12 +107,12 @@ export default function Index() {
                     placeholder="Search Mockups, Logos..."
                     required
                   />
-                  <button
+                  <Button
+                    label="Search"
                     type="submit"
-                    className="text-white absolute end-2.5 bottom-2.5 bg-primary-700 hover:bg-primary-800 focus:ring-0 focus:outline-none font-medium rounded-lg text-sm px-4 py-2"
-                  >
-                    Search
-                  </button>
+                    style="primary"
+                    className="absolute end-2.5 bottom-2.5"
+                  />
                 </div>
               </form>
             </div>
