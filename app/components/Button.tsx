@@ -20,7 +20,7 @@ function Button({
   const styled = () => {
     switch (style) {
       case "primary":
-        return "bg-primary-600 border border-primary-500 text-white hover:brightness-110";
+        return "bg-primary-400 text-gray-800 hover:brightness-90";
       case "secondary":
         return "bg-secondary-100 border border-secondary-300 text-gray-800 hover:bg-white";
       default:
