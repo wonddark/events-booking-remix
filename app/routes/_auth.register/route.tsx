@@ -33,7 +33,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 function Register() {
   return (
-    <div className="w-[90%] max-w-[500px] p-2.5 py-5 md:p-9 rounded-xl bg-white shadow-lg">
+    <div className="w-[90%] max-w-[400px] p-2.5 py-5 md:p-9 rounded-xl bg-white shadow-lg">
       <div className="flex justify-center mb-14">
         <HorizontalLogo />
       </div>
