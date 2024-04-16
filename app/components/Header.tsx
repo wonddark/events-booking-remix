@@ -13,7 +13,7 @@ function Header({ query }: { query: string | null }) {
   };
 
   return (
-    <header className="border-b border-b-gray-200">
+    <header className="border-b border-b-primary-100 sticky top-0 bg-white z-50">
       <div className="max-w-screen-2xl mx-auto px-2.5 lg:px-5 py-3 flex items-center flex-wrap md:flex-nowrap justify-between md:justify-start">
         <Link to="/" className="grow-0 order-1">
           EB
