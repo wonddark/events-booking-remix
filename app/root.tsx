@@ -1,6 +1,7 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
 import { LinksFunction, MetaFunction } from "@remix-run/node";
 import {
+  isRouteErrorResponse,
   Links,
   LiveReload,
   Meta,
@@ -8,16 +9,22 @@ import {
   Scripts,
   ScrollRestoration,
   useNavigation,
+  useRouteError,
 } from "@remix-run/react";
 import stylesheet from "~/styles/app.css";
 import "flowbite";
 import { useEffect } from "react";
+import ServerError from "~/components/ServerError";
+import NotFoundError from "~/components/NotFoundError";
+import Header from "~/components/Header";
 
+// noinspection JSUnusedGlobalSymbols
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
   { rel: "stylesheet", href: stylesheet },
 ];
 
+// noinspection JSUnusedGlobalSymbols
 export const meta: MetaFunction = () => {
   return [
     { title: "EventsBooking" },
@@ -25,6 +32,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+// noinspection JSUnusedGlobalSymbols
 export default function App() {
   const navigation = useNavigation();
   useEffect(() => {
@@ -75,6 +83,49 @@ export default function App() {
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
+      </body>
+    </html>
+  );
+}
+
+// noinspection JSUnusedGlobalSymbols
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  const renderError = () => {
+    if (isRouteErrorResponse(error)) {
+      switch (error.status) {
+        case 404:
+          return <NotFoundError />;
+      }
+    }
+    return <ServerError />;
+  };
+
+  return (
+    <html lang="en">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet"
+        />
+        <title>Oops!</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <Header query="" />
+        <div className="w-full mt-5" />
+        {renderError()}
+        <Scripts />
       </body>
     </html>
   );
