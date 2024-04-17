@@ -4,6 +4,7 @@ import createDBClient from "~/utils/supabase/server";
 import dayjs from "dayjs";
 import ArrowRight from "~/assets/ArrowRight";
 import Button from "../components/Button";
+import { useEffect, useState } from "react";
 
 export async function loader() {
   const dbClient = createDBClient();
@@ -34,6 +35,11 @@ export async function loader() {
 
 export default function Index() {
   const { recent, current, soon } = useLoaderData<typeof loader>();
+  const [loggedIn, setLoggedIn] = useState(false);
+  useEffect(() => {
+    const isLoggedIn = Boolean(localStorage.getItem("session"));
+    setLoggedIn(isLoggedIn);
+  }, []);
   return (
     <>
       <header className="bg-gradient-to-br from-[#c47b05ff] to-[#ffb933ff]">
@@ -44,17 +50,19 @@ export default function Index() {
             </Link>
             <nav>
               <ul className="flex items-center gap-3">
+                {!loggedIn && (
+                  <li>
+                    <Link
+                      to="/login"
+                      className="rounded flex justify-center items-center px-4 py-2 text-white font-bold hover:brightness-95"
+                    >
+                      Login
+                    </Link>
+                  </li>
+                )}
                 <li>
                   <Link
-                    to="/login"
-                    className="rounded flex justify-center items-center px-4 py-2 text-white font-bold hover:brightness-95"
-                  >
-                    Login
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/register"
+                    to={loggedIn ? "/events/create" : "/login"}
                     className="rounded flex justify-center items-center px-4 py-2 bg-white text-primary-800 hover:brightness-95"
                   >
                     Create event
