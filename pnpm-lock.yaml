@@ -17,6 +17,9 @@ dependencies:
   '@remix-run/serve':
     specifier: ^2.8.0
     version: 2.8.0(typescript@5.4.2)
+  '@supabase/ssr':
+    specifier: ^0.3.0
+    version: 0.3.0(@supabase/supabase-js@2.41.1)
   '@supabase/supabase-js':
     specifier: ^2.41.1
     version: 2.41.1
@@ -1832,6 +1835,16 @@ packages:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
+    dev: false
+
+  /@supabase/ssr@0.3.0(@supabase/supabase-js@2.41.1):
+    resolution: {integrity: sha512-lcVyQ7H6eumb2FB1Wa2N+jYWMfq6CFza3KapikT0fgttMQ+QvDgpNogx9jI8bZgKds+XFSMCojxFvFb+gwdbfA==}
+    peerDependencies:
+      '@supabase/supabase-js': ^2.33.1
+    dependencies:
+      '@supabase/supabase-js': 2.41.1
+      cookie: 0.5.0
+      ramda: 0.29.1
     dev: false
 
   /@supabase/storage-js@2.5.5:
@@ -6606,6 +6619,10 @@ packages:
   /queue-tick@1.0.1:
     resolution: {integrity: sha512-kJt5qhMxoszgU/62PLP1CJytzd2NKetjSRnyuj31fDd3Rlcz3fzlFdFLD1SItunPwyqEOkca6GbV612BWfaBag==}
     requiresBuild: true
+    dev: false
+
+  /ramda@0.29.1:
+    resolution: {integrity: sha512-OfxIeWzd4xdUNxlWhgFazxsA/nl3mS4/jGZI5n00uWOoSSFRhC1b6gl6xvmzUamgmqELraWp0J/qqVlXYPDPyA==}
     dev: false
 
   /randomatic@3.1.1:

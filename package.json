@@ -16,6 +16,7 @@
     "@remix-run/node": "^2.8.0",
     "@remix-run/react": "^2.8.0",
     "@remix-run/serve": "^2.8.0",
+    "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.41.1",
     "dayjs": "^1.11.10",
     "flowbite": "^2.3.0",
