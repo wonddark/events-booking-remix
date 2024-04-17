@@ -13,7 +13,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     searchParams.get("page_size") ?? process.env.DEFAULT_PAGE_SIZE
   );
 
-  const dbClient = createDBClient();
+  const dbClient = createDBClient({ request });
   const dbInstance = dbClient
     .from("events")
     .select("*, categories(id, name), tickets(count), event_owner!inner(*)")

@@ -13,7 +13,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const email = body.get("email");
   const password = body.get("password");
 
-  const dbClient = createDBClient();
+  const dbClient = createDBClient({ request });
 
   if (
     email &&

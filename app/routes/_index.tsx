@@ -5,9 +5,10 @@ import dayjs from "dayjs";
 import ArrowRight from "~/assets/ArrowRight";
 import Button from "../components/Button";
 import { useEffect, useState } from "react";
+import { LoaderFunctionArgs } from "@remix-run/node";
 
-export async function loader() {
-  const dbClient = createDBClient();
+export async function loader({ request }: LoaderFunctionArgs) {
+  const dbClient = createDBClient({ request });
   const today = dayjs().format("YYYY-MM-DD HH:mm:ss.sss");
   const { data: recent } = await dbClient
     .from("events")

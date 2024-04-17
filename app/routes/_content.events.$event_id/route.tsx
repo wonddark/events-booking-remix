@@ -3,8 +3,8 @@ import createDBClient from "~/utils/supabase/server";
 import { useLoaderData } from "@remix-run/react";
 import SvgTag from "~/assets/SvgTag";
 
-export async function loader({ params }: LoaderFunctionArgs) {
-  const dbClient = createDBClient();
+export async function loader({ params, request }: LoaderFunctionArgs) {
+  const dbClient = createDBClient({ request });
   const {
     data: event,
     error,
