@@ -1,4 +1,3 @@
-import NotFoundError from "~/components/NotFoundError";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import createDBClient from "~/utils/supabase/server";
 import dayjs from "dayjs";
@@ -13,8 +12,4 @@ export function loader({ request }: LoaderFunctionArgs) {
       "published_at",
       dayjs().subtract(72, "hours").format("YYYY-MM-DD HH:mm:ss.sss")
     );
-}
-
-export default function RecentEvents() {
-  return <NotFoundError />;
 }
