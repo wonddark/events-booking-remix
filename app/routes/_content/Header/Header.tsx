@@ -1,28 +1,12 @@
-import Button from "~/components/Button";
-import { Link, useNavigate } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { Link } from "@remix-run/react";
+import LogoutButton from "~/routes/_content/Header/LogoutButton";
+import LoginButton from "~/routes/_content/Header/LoginButton";
+import CreateEventButton from "~/routes/_content/Header/CreateEventButton";
 
-function Header({ query }: Readonly<{ query: string | null }>) {
-  const navigate = useNavigate();
-  const [loggedIn, setLoggedIn] = useState(false);
-
-  const goLogin = () => {
-    navigate("/login");
-  };
-
-  const createEvent = () => {
-    if (loggedIn) {
-      navigate("/events/create");
-    } else {
-      navigate("/register");
-    }
-  };
-
-  useEffect(() => {
-    const isLoggedIn = Boolean(localStorage.getItem("session"));
-    setLoggedIn(isLoggedIn);
-  }, []);
-
+function Header({
+  query,
+  userId,
+}: Readonly<{ query: string | null; userId: string | undefined }>) {
   return (
     <header className="border-b border-b-primary-100 sticky top-0 bg-white z-50">
       <div className="max-w-screen-2xl mx-auto px-2.5 lg:px-5 py-3 flex items-center flex-wrap md:flex-nowrap justify-between md:justify-start">
@@ -60,16 +44,9 @@ function Header({ query }: Readonly<{ query: string | null }>) {
           </form>
         </div>
         <div className="flex gap-x-2 grow-0 order-2 md:order-last">
-          {!loggedIn && (
-            <Button label="Login" type="button" onClick={goLogin} />
-          )}
-          <Button
-            label="Create event"
-            type="button"
-            style="primary"
-            onClick={createEvent}
-          />
-          {loggedIn && <Button label="Profile" type="button" />}
+          {!userId && <LoginButton />}
+          <CreateEventButton />
+          {userId && <LogoutButton />}
         </div>
       </div>
     </header>

@@ -1,16 +1,21 @@
 import { Link } from "@remix-run/react";
 import EventSVG from "~/assets/EventSVG";
 import Button from "../components/Button";
-import { useEffect, useState } from "react";
 import HomeStatics from "~/components/HomeStatics";
+import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
+import { getSessionFromCookie } from "~/utils/session";
+
+// noinspection JSUnusedGlobalSymbols
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const session = await getSessionFromCookie(request);
+
+  if (session.get("user_id")) {
+    return redirect("/events");
+  }
+  return json({});
+};
 
 export default function Index() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  useEffect(() => {
-    const isLoggedIn = Boolean(localStorage.getItem("session"));
-    setLoggedIn(isLoggedIn);
-  }, []);
-
   return (
     <>
       <header className="bg-gradient-to-br from-[#c47b05ff] to-[#ffb933ff]">
@@ -21,19 +26,17 @@ export default function Index() {
             </Link>
             <nav>
               <ul className="flex items-center gap-3">
-                {!loggedIn && (
-                  <li>
-                    <Link
-                      to="/login"
-                      className="rounded flex justify-center items-center px-4 py-2 text-white font-bold hover:brightness-95"
-                    >
-                      Login
-                    </Link>
-                  </li>
-                )}
                 <li>
                   <Link
-                    to={loggedIn ? "/events/create" : "/login"}
+                    to="/login"
+                    className="rounded flex justify-center items-center px-4 py-2 text-white font-bold hover:brightness-95"
+                  >
+                    Login
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/events/create"
                     className="rounded flex justify-center items-center px-4 py-2 bg-white text-primary-800 hover:brightness-95"
                   >
                     Create event

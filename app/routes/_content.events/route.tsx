@@ -12,6 +12,7 @@ export default function Events() {
   );
 }
 
+// noinspection JSUnusedGlobalSymbols
 export function ErrorBoundary() {
   const error = useRouteError();
   if (isRouteErrorResponse(error)) {

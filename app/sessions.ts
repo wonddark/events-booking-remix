@@ -2,6 +2,8 @@ import { createCookie, createCookieSessionStorage } from "@remix-run/node";
 
 type SessionData = {
   user_id: string;
+  access_token: string;
+  refresh_token: string;
 };
 
 type SessionFlashData = {

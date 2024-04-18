@@ -1,21 +1,48 @@
-import { ActionFunction, MetaFunction } from "@remix-run/node";
+import {
+  ActionFunction,
+  json,
+  LoaderFunctionArgs,
+  MetaFunction,
+  redirect,
+} from "@remix-run/node";
 import Button from "~/components/Button";
-import { Link, useActionData, useNavigate } from "@remix-run/react";
+import { Link, useActionData } from "@remix-run/react";
 import HorizontalLogo from "~/routes/_auth/HorizontalLogo";
 import createDBClient from "~/utils/supabase/server";
-import { useEffect } from "react";
+import { commitSession } from "~/sessions";
+import { getSessionFromCookie } from "~/utils/session";
 
 // noinspection JSUnusedGlobalSymbols
 export const meta: MetaFunction = () => {
   return [{ title: "Login" }];
 };
 
+// noinspection JSUnusedGlobalSymbols
+export async function loader({ request }: LoaderFunctionArgs) {
+  const session = await getSessionFromCookie(request);
+
+  if (session.has("user_id")) {
+    return redirect("/events");
+  }
+
+  const data = { error: session.get("error") };
+
+  return json(data, {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
+}
+
 export const action: ActionFunction = async ({ request }) => {
+  const session = await getSessionFromCookie(request);
+  const redirectUri = new URL(request.url).searchParams.get("redirect_uri");
+
   const body = await request.formData();
   const email = body.get("email");
   const password = body.get("password");
 
-  const dbClient = createDBClient({ request });
+  const dbClient = await createDBClient({ request });
 
   if (
     email &&
@@ -23,12 +50,30 @@ export const action: ActionFunction = async ({ request }) => {
     password &&
     typeof password === "string"
   ) {
-    const { data, error } = await dbClient.auth.signInWithPassword({
+    const { data } = await dbClient.auth.signInWithPassword({
       email,
       password,
     });
 
-    return { email, password, error, session: data?.session };
+    if (data.user === null) {
+      session.flash("error", "Wrong credentials");
+
+      return redirect("/login", {
+        headers: {
+          "Set-Cookie": await commitSession(session),
+        },
+      });
+    }
+
+    session.set("user_id", data.session.user.id);
+    session.set("access_token", data.session.access_token);
+    session.set("refresh_token", data.session.refresh_token);
+
+    return redirect(redirectUri ?? "/events", {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
   }
 
   throw new Response(body, { status: 400 });
@@ -36,19 +81,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 function Login() {
   const response = useActionData<typeof action>();
-  const navigate = useNavigate();
   const wrongCredentials = Boolean(response?.error);
-
-  useEffect(
-    () => {
-      if (window && response?.session) {
-        localStorage.setItem("session", JSON.stringify(response.session));
-        navigate("/events");
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [response]
-  );
 
   return (
     <div className="w-[90%] max-w-[400px] p-2.5 py-5 md:p-9 rounded-xl bg-white shadow-lg">

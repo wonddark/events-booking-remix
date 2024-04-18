@@ -1,8 +1,11 @@
 import { createServerClient, parse, serialize } from "@supabase/ssr";
 import { Database } from "../../../database.types";
+import { getSessionFromCookie } from "~/utils/session";
 
-function createDBClient({ request }: { request: Request }) {
+async function createDBClient({ request }: { request: Request }) {
   const cookies = parse(request.headers.get("Cookie") ?? "");
+  const session = await getSessionFromCookie(request);
+
   const headers = new Headers();
 
   return createServerClient<Database>(
@@ -18,6 +21,11 @@ function createDBClient({ request }: { request: Request }) {
         },
         remove(key, options) {
           headers.append("Set-Cookie", serialize(key, "", options));
+        },
+      },
+      global: {
+        headers: {
+          Authorization: `Bearer ${session.get("access_token")}`,
         },
       },
     }

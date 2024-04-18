@@ -16,7 +16,6 @@ import "flowbite";
 import { useEffect } from "react";
 import ServerError from "~/components/ServerError";
 import NotFoundError from "~/components/NotFoundError";
-import Header from "~/components/Header";
 
 // noinspection JSUnusedGlobalSymbols
 export const links: LinksFunction = () => [
@@ -48,6 +47,7 @@ export default function App() {
       }
     }
   }, []);
+
   return (
     <html lang="en">
       <head>
@@ -122,7 +122,6 @@ export function ErrorBoundary() {
         <Links />
       </head>
       <body>
-        <Header query="" />
         <div className="w-full mt-5" />
         {renderError()}
         <Scripts />

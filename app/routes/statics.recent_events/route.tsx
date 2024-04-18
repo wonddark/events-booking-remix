@@ -2,8 +2,8 @@ import { LoaderFunctionArgs } from "@remix-run/node";
 import createDBClient from "~/utils/supabase/server";
 import dayjs from "dayjs";
 
-export function loader({ request }: LoaderFunctionArgs) {
-  const dbClient = createDBClient({ request });
+export async function loader({ request }: LoaderFunctionArgs) {
+  const dbClient = await createDBClient({ request });
 
   return dbClient
     .from("events")

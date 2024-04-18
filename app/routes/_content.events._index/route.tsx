@@ -13,11 +13,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     searchParams.get("page_size") ?? process.env.DEFAULT_PAGE_SIZE
   );
 
-  const dbClient = createDBClient({ request });
+  const dbClient = await createDBClient({ request });
   const dbInstance = dbClient
     .from("events")
     .select("*, categories(id, name), tickets(count), event_owner!inner(*)")
-    .order("published_at", { ascending: false })
+    .order("published_at", { ascending: true })
     .range((page - 1) * page_size, page * page_size - 1);
 
   if (query) {

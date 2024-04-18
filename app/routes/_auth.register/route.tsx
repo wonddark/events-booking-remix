@@ -4,16 +4,18 @@ import Button from "~/components/Button";
 import HorizontalLogo from "~/routes/_auth/HorizontalLogo";
 import createDBClient from "~/utils/supabase/server";
 
+// noinspection JSUnusedGlobalSymbols
 export const meta: MetaFunction = () => {
   return [{ title: "Register" }];
 };
 
+// noinspection JSUnusedGlobalSymbols
 export const action = async ({ request }: ActionFunctionArgs) => {
   const body = await request.formData();
   const email = body.get("email");
   const password = body.get("password");
 
-  const dbClient = createDBClient({ request });
+  const dbClient = await createDBClient({ request });
 
   if (
     email &&

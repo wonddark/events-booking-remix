@@ -4,7 +4,7 @@ import { useLoaderData } from "@remix-run/react";
 import SvgTag from "~/assets/SvgTag";
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
-  const dbClient = createDBClient({ request });
+  const dbClient = await createDBClient({ request });
   const {
     data: event,
     error,
