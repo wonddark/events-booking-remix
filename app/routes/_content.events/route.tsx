@@ -24,11 +24,7 @@ export const handle = {
 };
 
 export default function Events() {
-  return (
-    <div>
-      <Outlet />
-    </div>
-  );
+  return <Outlet />;
 }
 
 // noinspection JSUnusedGlobalSymbols
