@@ -1,6 +1,6 @@
 function ServerError() {
   return (
-    <div className="text-center">
+    <div className="text-center px-2.5">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -628,10 +628,10 @@ function ServerError() {
           opacity="0.1"
         />
       </svg>
-      <h1 className="text-xl md:text-4xl font-light text-gray-800">
+      <h1 className="text-2xl md:text-4xl text-gray-800">
         Sorry, we have some internal issues
       </h1>
-      <h3 className="mt-3 md:max-w-[700px] mx-auto text-lg md:text-xl font-light">
+      <h3 className="mt-3 md:max-w-[700px] mx-auto md:text-xl font-light">
         But don&apos;t worry to much, we are already working on fix them as soon
         as possible. In the meantime you can continue using the rest of the site
         features
