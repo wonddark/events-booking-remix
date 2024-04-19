@@ -16,8 +16,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const dbClient = await createDBClient({ request });
   const dbInstance = dbClient
     .from("events")
-    .select("*, categories(id, name), tickets(count), event_owner!inner(*)")
-    .order("published_at", { ascending: true })
+    .select("*, categories(id, name), tickets(count), event_owner(*)")
+    .order("published_at", { ascending: false })
     .range((page - 1) * page_size, page * page_size - 1);
 
   if (query) {
