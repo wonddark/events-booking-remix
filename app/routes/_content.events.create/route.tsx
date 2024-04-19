@@ -29,8 +29,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const session = await getSessionFromCookie(request);
-  const userId = session.get("user_id");
   const formData = await request.formData();
 
   const payload: Database["public"]["Tables"]["events"]["Insert"] = {
@@ -41,21 +39,14 @@ export async function action({ request }: ActionFunctionArgs) {
     end_date: formData.get("end_date") as string,
     max_attendees: Number(formData.get("max_attendees")),
     start_date: formData.get("start_date") as string,
-    user_id: userId,
   };
-  console.log("Payload", payload);
 
   const dbClient = await createDBClient({ request });
-  const { data, error: sessionError } = await dbClient.auth.setSession({
-    access_token: session.get("access_token")!,
-    refresh_token: session.get("refresh_token")!,
-  });
-  console.log("Session data", data, "Session error", sessionError);
+
   const { data: event, error } = await dbClient
     .from("events")
     .insert([payload])
     .select("id");
-  console.log("New event", event, "Error creating", error);
 
   if (error) {
     return json({ error });
@@ -66,7 +57,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
 function CreateEvent() {
   const actionData = useActionData<typeof action>();
-  console.log("Action data", actionData);
   const navigation = useNavigation();
   const isSubmitting = navigation.formAction === "/events/create";
 
