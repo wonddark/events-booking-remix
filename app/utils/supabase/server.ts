@@ -5,8 +5,10 @@ import { getSessionFromCookie } from "~/utils/session";
 async function createDBClient({ request }: { request: Request }) {
   const cookies = parse(request.headers.get("Cookie") ?? "");
   const session = await getSessionFromCookie(request);
-
   const headers = new Headers();
+
+  const access_token = session.get("access_token");
+  access_token && headers.set("Authorization", `Bearer ${access_token}`);
 
   return createServerClient<Database>(
     process.env.DATABASE_URL!,
@@ -24,9 +26,7 @@ async function createDBClient({ request }: { request: Request }) {
         },
       },
       global: {
-        headers: {
-          Authorization: `Bearer ${session.get("access_token")}`,
-        },
+        headers: Object.fromEntries(headers),
       },
     }
   );
