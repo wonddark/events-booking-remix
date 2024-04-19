@@ -1,8 +1,27 @@
-import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
+import {
+  isRouteErrorResponse,
+  Outlet,
+  UIMatch,
+  useRouteError,
+} from "@remix-run/react";
 import AccessDeniedError from "~/components/AccessDeniedError";
 import NotFoundError from "~/components/NotFoundError";
 import ServerError from "~/components/ServerError";
 import { ErrorResponse } from "@remix-run/node";
+import BreadcrumbsLink from "~/components/BreadcrumbsLink";
+
+// noinspection JSUnusedGlobalSymbols
+export const handle = {
+  breadcrumbs: (match: UIMatch, currentPath: boolean) => {
+    if (currentPath) {
+      return null;
+    } else {
+      return (
+        <BreadcrumbsLink key={match.id} name="Events" uri={match.pathname} />
+      );
+    }
+  },
+};
 
 export default function Events() {
   return (
@@ -15,6 +34,7 @@ export default function Events() {
 // noinspection JSUnusedGlobalSymbols
 export function ErrorBoundary() {
   const error = useRouteError();
+
   if (isRouteErrorResponse(error)) {
     switch (error.status) {
       case 403:
