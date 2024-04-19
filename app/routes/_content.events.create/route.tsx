@@ -6,6 +6,7 @@ import {
 } from "@remix-run/node";
 import {
   Form,
+  UIMatch,
   useActionData,
   useFetcher,
   useNavigation,
@@ -16,6 +17,14 @@ import Button from "~/components/Button";
 import { action as categoriesAction } from "../_content.categories/route";
 import { useRef } from "react";
 import { getSessionFromCookie } from "~/utils/session";
+import BreadcrumbsPlain from "~/components/BreadcrumbsPlain";
+
+// noinspection JSUnusedGlobalSymbols
+export const handle = {
+  breadcrumbs: (match: UIMatch) => (
+    <BreadcrumbsPlain key={match.id} name="Create new" />
+  ),
+};
 
 // noinspection JSUnusedGlobalSymbols
 export async function loader({ request }: LoaderFunctionArgs) {
