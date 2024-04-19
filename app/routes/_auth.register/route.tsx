@@ -1,12 +1,29 @@
-import { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import {
+  ActionFunctionArgs,
+  LoaderFunction,
+  MetaFunction,
+  redirect,
+} from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import Button from "~/components/Button";
 import HorizontalLogo from "~/routes/_auth/HorizontalLogo";
 import createDBClient from "~/utils/supabase/server";
+import { getSessionFromCookie } from "~/utils/session";
 
 // noinspection JSUnusedGlobalSymbols
 export const meta: MetaFunction = () => {
   return [{ title: "Register" }];
+};
+
+// noinspection JSUnusedGlobalSymbols
+export const loader: LoaderFunction = async ({ request }) => {
+  const session = await getSessionFromCookie(request);
+
+  if (session.has("user_id")) {
+    return redirect("/events");
+  }
+
+  return new Response(null, { status: 200 });
 };
 
 // noinspection JSUnusedGlobalSymbols
