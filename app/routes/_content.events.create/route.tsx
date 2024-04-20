@@ -4,20 +4,14 @@ import {
   LoaderFunctionArgs,
   redirect,
 } from "@remix-run/node";
-import {
-  Form,
-  UIMatch,
-  useActionData,
-  useFetcher,
-  useNavigation,
-} from "@remix-run/react";
+import { Form, UIMatch, useActionData, useNavigation } from "@remix-run/react";
 import createDBClient from "~/utils/supabase/server";
 import { Database } from "../../../database.types";
 import Button from "~/components/Button";
-import { action as categoriesAction } from "../_content.categories/route";
 import { useRef } from "react";
 import { getSessionFromCookie } from "~/utils/session";
 import BreadcrumbsPlain from "~/components/BreadcrumbsPlain";
+import CategorySelector from "~/components/CategorySelector";
 
 // noinspection JSUnusedGlobalSymbols
 export const handle = {
@@ -70,9 +64,6 @@ function CreateEvent() {
   const isSubmitting = navigation.formAction === "/events/create";
 
   const inputCategoryRef = useRef<HTMLInputElement>(null);
-  const selectCategoryRef = useRef<HTMLInputElement>(null);
-
-  const categories = useFetcher<typeof categoriesAction>();
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -159,54 +150,7 @@ function CreateEvent() {
         />
       </Form>
 
-      <categories.Form action="/categories" method="POST">
-        <div className="w-full">
-          <label htmlFor="event_category" className="text-primary-950">
-            Category{" "}
-            <input
-              type="text"
-              name="category_name"
-              id="event_category"
-              placeholder="Category name"
-              required={false}
-              className={`rounded-lg py-1.5 px-3.5 w-full`}
-              ref={selectCategoryRef}
-              onChange={(event) => categories.submit(event.target.form)}
-            />
-          </label>
-          <div className="mt-1 rounded-lg border shadow-md z-10 w-full">
-            <ul className="flex flex-col p-0 m-0">
-              {categories.data?.data && categories.data.data.length > 0 ? (
-                <>
-                  {categories.data?.data?.map((category) => (
-                    <li
-                      key={category.id}
-                      className="rounded-lg py-1.5 px-3.5 w-full hover:bg-gray-50"
-                    >
-                      <button
-                        type="button"
-                        className="w-full text-left"
-                        onClick={() => {
-                          selectCategoryRef.current &&
-                            (selectCategoryRef.current.value = category.name);
-                          inputCategoryRef.current &&
-                            (inputCategoryRef.current.value = category.id);
-                        }}
-                      >
-                        {category.name}
-                      </button>
-                    </li>
-                  ))}
-                </>
-              ) : (
-                <li className="rounded-lg py-1.5 px-3.5 w-full hover:bg-gray-50 cursor-pointer">
-                  <span>Nothing found</span>
-                </li>
-              )}
-            </ul>
-          </div>
-        </div>
-      </categories.Form>
+      <CategorySelector inputRef={inputCategoryRef} />
     </div>
   );
 }
