@@ -10,18 +10,20 @@ import {
   UIMatch,
   useActionData,
   useLoaderData,
+  useNavigate,
   useNavigation,
 } from "@remix-run/react";
 import BreadcrumbsLink from "~/components/BreadcrumbsLink";
 import BreadcrumbsPlain from "~/components/BreadcrumbsPlain";
 import Button from "~/components/Button";
 import { Database } from "../../../database.types";
-import { getSessionFromCookie } from "~/utils/session";
 import CategorySelector from "~/components/CategorySelector";
 import { useRef } from "react";
 import dayjs from "dayjs";
 import Floppy from "~/assets/Floppy";
 import Close from "~/assets/Close";
+import { commitSession, destroySession } from "~/sessions";
+import { setAuthorization } from "~/utils/session";
 
 // noinspection JSUnusedGlobalSymbols
 export const handle = {
@@ -38,28 +40,37 @@ export const handle = {
 };
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
-  const session = await getSessionFromCookie(request);
+  const dbClient = createDBClient({ request });
+  const authorization = await setAuthorization(request, dbClient);
 
-  if (session.has("user_id")) {
-    const dbClient = await createDBClient({ request });
-
-    const {
-      data: event,
-      error,
-      status,
-      statusText,
-    } = await dbClient
-      .from("events")
-      .select("*, categories(id, name), tickets(count)")
-      .eq("id", params.event_id!);
-
-    if (session.get("user_id") !== event?.[0].user_id) {
-      return new Response(null, { status: 403 });
-    }
-
-    return { event: event?.[0], error, status, statusText };
+  if (authorization.error) {
+    return redirect("/login", {
+      headers: { "Set-Cookie": await destroySession(authorization.session) },
+      status: 401,
+    });
   }
-  return redirect("/login");
+
+  const {
+    data: event,
+    error,
+    status,
+    statusText,
+  } = await dbClient
+    .from("events")
+    .select("*, categories(id, name), tickets(count)")
+    .eq("id", params.event_id!);
+
+  if (authorization.session.get("user_id") !== event?.[0].user_id) {
+    return new Response(null, {
+      status: 403,
+      headers: { "Set-Cookie": await commitSession(authorization.session) },
+    });
+  }
+
+  return json(
+    { event: event?.[0], error, status, statusText },
+    { headers: { "Set-Cookie": await commitSession(authorization.session) } }
+  );
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -79,19 +90,33 @@ export async function action({ request, params }: ActionFunctionArgs) {
     ),
   };
 
-  const dbClient = await createDBClient({ request });
+  const dbClient = createDBClient({ request });
+  const authorization = await setAuthorization(request, dbClient);
 
-  const { data: event, error } = await dbClient
+  if (authorization.error) {
+    return redirect("/login", {
+      headers: { "Set-Cookie": await destroySession(authorization.session) },
+      status: 401,
+    });
+  }
+
+  const {
+    data: event,
+    error,
+    status,
+  } = await dbClient
     .from("events")
     .update(payload)
     .eq("id", `${params.event_id}`)
     .select("id");
 
-  if (error) {
-    return json({ error });
-  }
-
-  return redirect(`/events/${event?.[0].id}`);
+  return json(
+    { event, error },
+    {
+      headers: { "Set-Cookie": await commitSession(authorization.session) },
+      status,
+    }
+  );
 }
 
 function EditEvent() {
@@ -101,6 +126,11 @@ function EditEvent() {
 
   const navigation = useNavigation();
   const isSubmitting = navigation.formAction === `/events/${event?.id}/edit`;
+
+  const navigate = useNavigate();
+  if (actionData?.event && actionData.event.length > 0) {
+    navigate(`/events/${event.id}`);
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
