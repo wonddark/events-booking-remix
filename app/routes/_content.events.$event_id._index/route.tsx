@@ -6,8 +6,8 @@ import BreadcrumbsLink from "~/components/BreadcrumbsLink";
 import BreadcrumbsPlain from "~/components/BreadcrumbsPlain";
 import { getSessionFromCookie } from "~/utils/session";
 import Button from "~/components/Button";
-import TrashBin from "~/assets/TrashBin";
 import Pen from "~/assets/Pen";
+import ButtonDeleteEvent from "~/components/ButtonDeleteEvent";
 
 // noinspection JSUnusedGlobalSymbols
 export const handle = {
@@ -64,13 +64,7 @@ function ViewEvent() {
                 asLink
                 href={`/events/${event?.id}/edit`}
               />
-              <Button
-                label="Delete"
-                type="button"
-                style="danger"
-                className="text-sm !py-1 !px-2"
-                preIcon={<TrashBin />}
-              />
+              <ButtonDeleteEvent eventId={`${event?.id}`} />
             </div>
           )}
           <span className="flex gap-1 items-center font-light rounded-lg py-1.5 px-3 bg-secondary-100 w-fit mb-4 text-sm">
