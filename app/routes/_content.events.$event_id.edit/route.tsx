@@ -74,6 +74,16 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
+  const dbClient = createDBClient({ request });
+  const authorization = await setAuthorization(request, dbClient);
+
+  if (authorization.error) {
+    return redirect("/login", {
+      headers: { "Set-Cookie": await destroySession(authorization.session) },
+      status: 401,
+    });
+  }
+
   const formData = await request.formData();
 
   const payload: Database["public"]["Tables"]["events"]["Insert"] = {
@@ -89,16 +99,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
       "YYYY-MM-DD HH:mm:ss.sss"
     ),
   };
-
-  const dbClient = createDBClient({ request });
-  const authorization = await setAuthorization(request, dbClient);
-
-  if (authorization.error) {
-    return redirect("/login", {
-      headers: { "Set-Cookie": await destroySession(authorization.session) },
-      status: 401,
-    });
-  }
 
   const {
     data: event,
