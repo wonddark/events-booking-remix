@@ -1,4 +1,5 @@
 import React, { MouseEventHandler } from "react";
+import { Link } from "@remix-run/react";
 
 function Button({
   label,
@@ -9,38 +10,42 @@ function Button({
   className = "",
   onClick,
   loading,
+  asLink,
+  href = "#",
+  form,
 }: Readonly<{
   label: string;
   type: "button" | "submit" | "reset";
-  style?: "primary" | "secondary" | "light";
+  style?: "primary" | "secondary" | "light" | "danger";
   preIcon?: React.ReactElement;
   postIcon?: React.ReactElement;
   className?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   loading?: boolean;
+  asLink?: boolean;
+  href?: string;
+  form?: string;
 }>) {
   const styled = () => {
     switch (style) {
       case "primary":
-        return "bg-primary-400 text-gray-800 hover:brightness-90";
+        return "bg-primary-400 text-gray-800";
       case "secondary":
-        return "bg-secondary-100 border border-secondary-300 text-gray-800 hover:bg-white";
+        return "bg-secondary-100 border border-secondary-300 text-gray-800";
+      case "danger":
+        return "bg-red-100 text-red-900";
       default:
         return "";
     }
   };
-  return (
-    <button
-      type={type}
-      className={`rounded-md py-1.5 px-3.5 cursor-pointer flex justify-center items-center min-w-max ${styled()} ${className}`}
-      onClick={onClick}
-    >
-      {preIcon ?? null}{" "}
+  const renderContent = () => (
+    <>
+      {preIcon ?? null}
       {loading && (
         <output>
           <svg
             aria-hidden="true"
-            className="animate-spin text-current fill-primary-500 mr-2"
+            className="animate-spin text-current fill-primary-500"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -58,9 +63,23 @@ function Button({
           </svg>
           <span className="sr-only">Loading...</span>
         </output>
-      )}{" "}
+      )}
       <span>{label}</span> {postIcon ?? null}
-    </button>
+    </>
+  );
+  const classes = `rounded-md py-1.5 px-3.5 cursor-pointer inline-flex justify-center items-center gap-1 min-w-max hover:brightness-90 ${styled()} ${className}`;
+  return (
+    <>
+      {!asLink ? (
+        <button type={type} className={classes} onClick={onClick} form={form}>
+          {renderContent()}
+        </button>
+      ) : (
+        <Link to={href} className={classes}>
+          {renderContent()}
+        </Link>
+      )}
+    </>
   );
 }
 
