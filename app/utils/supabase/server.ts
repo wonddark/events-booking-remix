@@ -14,6 +14,11 @@ async function createDBClient({ request }: { request: Request }) {
     process.env.DATABASE_URL!,
     process.env.DATABASE_ANON_KEY!,
     {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+        detectSessionInUrl: false,
+      },
       cookies: {
         get(key) {
           return cookies[key];
