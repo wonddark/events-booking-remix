@@ -78,10 +78,6 @@ function ViewEvent() {
             {event?.categories?.name}
           </span>
           <p className="mb-4">{event?.description}</p>
-          <p>
-            We are strategists, designers and developers. Innovators and problem
-            solvers. Small enough to be simple and quick.
-          </p>
         </div>
         <div className="">
           <img
