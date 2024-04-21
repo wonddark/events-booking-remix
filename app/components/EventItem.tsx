@@ -2,6 +2,7 @@ import Button from "~/components/Button";
 import SearchOutlined from "~/assets/SearchOutlined";
 import { Database } from "../../database.types";
 import { Link, useNavigate } from "@remix-run/react";
+import CheckPlus from "~/assets/CheckPlus";
 
 function EventItem({
   item,
@@ -30,13 +31,18 @@ function EventItem({
       <Link to={`/events/${item.id}`} className="font-bold mt-3">
         {item.name}
       </Link>
-      <div className="mt-7 flex-1 grid grid-cols-1 items-end">
+      <div className="mt-7 flex-1 grid grid-cols-[40%_50%] justify-between items-end">
+        <Button
+          label="Book a sit"
+          type="button"
+          style="primary"
+          postIcon={<CheckPlus />}
+        />
         <Button
           label="Details"
           type="button"
           style="secondary"
-          postIcon={<SearchOutlined style={{ marginLeft: "7px" }} />}
-          className="w-[80%] mx-auto"
+          postIcon={<SearchOutlined />}
           onClick={viewDetails}
         />
       </div>
