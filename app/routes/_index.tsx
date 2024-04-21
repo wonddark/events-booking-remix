@@ -3,16 +3,28 @@ import EventSVG from "~/assets/EventSVG";
 import Button from "../components/Button";
 import HomeStatics from "~/components/HomeStatics";
 import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
-import { getSessionFromCookie } from "~/utils/session";
+import createDBClient from "~/utils/supabase/server";
+import { setAuthorization } from "~/utils/session";
+import { commitSession, destroySession } from "~/sessions";
 
 // noinspection JSUnusedGlobalSymbols
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const session = await getSessionFromCookie(request);
+  const dBClient = createDBClient({ request });
+  const authorization = await setAuthorization(request, dBClient);
 
-  if (session.get("user_id")) {
-    return redirect("/events");
+  if (
+    !authorization.error &&
+    Object.keys(authorization.session.data).length > 0
+  ) {
+    return redirect("/events", {
+      headers: { "Set-Cookie": await commitSession(authorization.session) },
+    });
   }
-  return json({});
+
+  return json(
+    {},
+    { headers: { "Set-Cookie": await destroySession(authorization.session) } }
+  );
 };
 
 export default function Index() {

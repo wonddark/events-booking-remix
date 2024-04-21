@@ -9,6 +9,7 @@ import Button from "~/components/Button";
 import HorizontalLogo from "~/routes/_auth/HorizontalLogo";
 import createDBClient from "~/utils/supabase/server";
 import { getSessionFromCookie } from "~/utils/session";
+import { commitSession } from "~/sessions";
 
 // noinspection JSUnusedGlobalSymbols
 export const meta: MetaFunction = () => {
@@ -20,10 +21,15 @@ export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSessionFromCookie(request);
 
   if (session.has("user_id")) {
-    return redirect("/events");
+    return redirect("/events", {
+      headers: { "Set-cookie": await commitSession(session) },
+    });
   }
 
-  return new Response(null, { status: 200 });
+  return new Response(null, {
+    status: 200,
+    headers: { "Set-cookie": await commitSession(session) },
+  });
 };
 
 // noinspection JSUnusedGlobalSymbols
@@ -32,7 +38,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const email = body.get("email");
   const password = body.get("password");
 
-  const dbClient = await createDBClient({ request });
+  const dbClient = createDBClient({ request });
 
   if (
     email &&

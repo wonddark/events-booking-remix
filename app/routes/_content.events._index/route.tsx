@@ -3,6 +3,8 @@ import { useLoaderData } from "@remix-run/react";
 import createDBClient from "~/utils/supabase/server";
 import EventItem from "~/components/EventItem";
 import * as process from "node:process";
+import { setAuthorization } from "~/utils/session";
+import { commitSession } from "~/sessions";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
@@ -13,7 +15,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     searchParams.get("page_size") ?? process.env.DEFAULT_PAGE_SIZE
   );
 
-  const dbClient = await createDBClient({ request });
+  const dbClient = createDBClient({ request });
+  const authorization = await setAuthorization(request, dbClient);
+
   const dbInstance = dbClient
     .from("events")
     .select("*, categories(id, name), tickets(count), event_owner(*)")
@@ -26,15 +30,23 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const { data: events, error, count } = await dbInstance;
   if (error) {
-    throw new Response("Internal server error", {
-      status: 500,
-    });
+    return json(
+      { events: [], count: 0, custom: "test" },
+      {
+        status: 500,
+        headers: { "Set-Cookie": await commitSession(authorization.session) },
+      }
+    );
   }
-  return json({ events, count });
+  return json(
+    { events, count, custom: "test" },
+    { headers: { "Set-Cookie": await commitSession(authorization.session) } }
+  );
 }
 
 export default function Events() {
   const { events } = useLoaderData<typeof loader>();
+
   return (
     <>
       {events.length > 0 ? (

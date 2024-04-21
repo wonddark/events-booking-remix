@@ -9,9 +9,10 @@ import createDBClient from "~/utils/supabase/server";
 import { Database } from "../../../database.types";
 import Button from "~/components/Button";
 import { useRef } from "react";
-import { getSessionFromCookie } from "~/utils/session";
+import { setAuthorization } from "~/utils/session";
 import BreadcrumbsPlain from "~/components/BreadcrumbsPlain";
 import CategorySelector from "~/components/CategorySelector";
+import { commitSession, destroySession } from "~/sessions";
 
 // noinspection JSUnusedGlobalSymbols
 export const handle = {
@@ -22,16 +23,34 @@ export const handle = {
 
 // noinspection JSUnusedGlobalSymbols
 export async function loader({ request }: LoaderFunctionArgs) {
-  const session = await getSessionFromCookie(request);
-  const userId = session.get("user_id");
+  const dbClient = createDBClient({ request });
+  const authorization = await setAuthorization(request, dbClient);
 
-  if (userId) {
-    return json({ userId });
+  if (authorization.session.get("user_id")) {
+    return json(
+      { userId: authorization.session.get("user_id") },
+      { headers: { "Set-Cookie": await commitSession(authorization.session) } }
+    );
   }
-  return redirect("/login?redirect_uri=/events/create");
+
+  return redirect("/login?redirect_uri=/events/create", {
+    headers: { "Set-Cookie": await destroySession(authorization.session) },
+  });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  const dbClient = createDBClient({ request });
+  const authorization = await setAuthorization(request, dbClient);
+
+  if (
+    authorization.error ||
+    Object.keys(authorization.session.data).length === 0
+  ) {
+    return redirect("/login", {
+      headers: { "Set-Cookie": await destroySession(authorization.session) },
+    });
+  }
+
   const formData = await request.formData();
 
   const payload: Database["public"]["Tables"]["events"]["Insert"] = {
@@ -44,27 +63,32 @@ export async function action({ request }: ActionFunctionArgs) {
     start_date: formData.get("start_date") as string,
   };
 
-  const dbClient = await createDBClient({ request });
-
-  const { data: event, error } = await dbClient
-    .from("events")
-    .insert([payload])
-    .select("id");
+  const {
+    data: event,
+    error,
+    statusText,
+  } = await dbClient.from("events").insert([payload]).select("id");
 
   if (error) {
-    return json({ error });
+    authorization.session.flash("error", statusText);
+    return json(
+      { error },
+      { headers: { "Set-Cookie": await commitSession(authorization.session) } }
+    );
   }
 
-  return redirect(`/events/${event?.[0].id}`);
+  authorization.session.flash("success", "201");
+
+  return redirect(`/events/${event?.[0].id}`, {
+    headers: { "Set-Cookie": await commitSession(authorization.session) },
+  });
 }
 
 function CreateEvent() {
   const actionData = useActionData<typeof action>();
   const navigation = useNavigation();
   const isSubmitting = navigation.formAction === "/events/create";
-
   const inputCategoryRef = useRef<HTMLInputElement>(null);
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
       <Form className="flex flex-col items-center gap-3" method="POST">

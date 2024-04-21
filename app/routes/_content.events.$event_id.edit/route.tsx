@@ -18,7 +18,7 @@ import BreadcrumbsPlain from "~/components/BreadcrumbsPlain";
 import Button from "~/components/Button";
 import { Database } from "../../../database.types";
 import CategorySelector from "~/components/CategorySelector";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import dayjs from "dayjs";
 import Floppy from "~/assets/Floppy";
 import Close from "~/assets/Close";
@@ -43,7 +43,10 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   const dbClient = createDBClient({ request });
   const authorization = await setAuthorization(request, dbClient);
 
-  if (authorization.error) {
+  if (
+    authorization.error ||
+    Object.keys(authorization.session.data).length === 0
+  ) {
     return redirect("/login", {
       headers: { "Set-Cookie": await destroySession(authorization.session) },
       status: 401,
@@ -77,7 +80,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const dbClient = createDBClient({ request });
   const authorization = await setAuthorization(request, dbClient);
 
-  if (authorization.error) {
+  if (
+    authorization.error ||
+    Object.keys(authorization.session.data).length === 0
+  ) {
     return redirect("/login", {
       headers: { "Set-Cookie": await destroySession(authorization.session) },
       status: 401,
@@ -128,9 +134,12 @@ function EditEvent() {
   const isSubmitting = navigation.formAction === `/events/${event?.id}/edit`;
 
   const navigate = useNavigate();
-  if (actionData?.event && actionData.event.length > 0) {
-    navigate(`/events/${event.id}`);
-  }
+
+  useEffect(() => {
+    if (actionData?.event && actionData.event.length > 0) {
+      navigate(`/events/${event.id}`);
+    }
+  }, [actionData]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

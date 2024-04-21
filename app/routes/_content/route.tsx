@@ -7,16 +7,29 @@ import {
 } from "@remix-run/react";
 import Header from "~/routes/_content/Header/Header";
 import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { getSessionFromCookie } from "~/utils/session";
+import { setAuthorization } from "~/utils/session";
 import { ReactNode } from "react";
+import createDBClient from "~/utils/supabase/server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const session = await getSessionFromCookie(request);
+  const dbClient = createDBClient({ request });
+  const authorization = await setAuthorization(request, dbClient);
+
+  let userId: string | undefined = undefined;
+  if (
+    !authorization.error &&
+    Object.keys(authorization.session.data).length > 0
+  ) {
+    const { data } = await dbClient.auth.getUser();
+    if (data.user) {
+      userId = data.user.id;
+    }
+  }
   const url = new URL(request.url);
   const query = url.searchParams.get("query");
 
   return json({
-    user_id: session.get("user_id"),
+    user_id: userId,
     query,
   });
 };

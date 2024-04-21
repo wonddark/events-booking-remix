@@ -42,7 +42,7 @@ export const action: ActionFunction = async ({ request }) => {
   const email = body.get("email");
   const password = body.get("password");
 
-  const dbClient = await createDBClient({ request });
+  const dbClient = createDBClient({ request });
 
   if (
     email &&

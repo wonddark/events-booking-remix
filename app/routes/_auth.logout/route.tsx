@@ -5,7 +5,8 @@ import { getSessionFromCookie } from "~/utils/session";
 
 export async function action({ request }: LoaderFunctionArgs) {
   const session = await getSessionFromCookie(request);
-  const dbClient = await createDBClient({ request });
+
+  const dbClient = createDBClient({ request });
 
   const { error } = await dbClient.auth.signOut();
 
@@ -18,8 +19,6 @@ export async function action({ request }: LoaderFunctionArgs) {
   }
 
   return redirect("/events", {
-    headers: {
-      "Set-Cookie": await destroySession(session),
-    },
+    headers: { "Set-Cookie": await destroySession(session) },
   });
 }

@@ -1,13 +1,14 @@
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { json, LoaderFunctionArgs } from "@remix-run/node";
 import createDBClient from "~/utils/supabase/server";
 import { UIMatch, useLoaderData } from "@remix-run/react";
 import SvgTag from "~/assets/SvgTag";
 import BreadcrumbsLink from "~/components/BreadcrumbsLink";
 import BreadcrumbsPlain from "~/components/BreadcrumbsPlain";
-import { getSessionFromCookie } from "~/utils/session";
+import { setAuthorization } from "~/utils/session";
 import Button from "~/components/Button";
 import Pen from "~/assets/Pen";
 import ButtonDeleteEvent from "~/components/ButtonDeleteEvent";
+import { commitSession } from "~/sessions";
 
 // noinspection JSUnusedGlobalSymbols
 export const handle = {
@@ -24,8 +25,9 @@ export const handle = {
 };
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
-  const session = await getSessionFromCookie(request);
-  const dbClient = await createDBClient({ request });
+  const dbClient = createDBClient({ request });
+  const authorization = await setAuthorization(request, dbClient);
+
   const {
     data: event,
     error,
@@ -35,13 +37,17 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     .from("events")
     .select("*, categories(id, name), tickets(id, user_id), event_owner(*)")
     .eq("id", params.event_id!);
-  return {
-    event: event?.[0],
-    error,
-    status,
-    statusText,
-    owner: session.get("user_id") === event?.[0].user_id,
-  };
+
+  return json(
+    {
+      event: event?.[0],
+      error,
+      status,
+      statusText,
+      owner: authorization.session.get("user_id") === event?.[0].user_id,
+    },
+    { headers: { "Set-Cookie": await commitSession(authorization.session) } }
+  );
 }
 
 function ViewEvent() {

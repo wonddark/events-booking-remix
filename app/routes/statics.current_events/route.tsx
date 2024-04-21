@@ -1,15 +1,22 @@
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { json, LoaderFunctionArgs } from "@remix-run/node";
 import createDBClient from "~/utils/supabase/server";
 import dayjs from "dayjs";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const dbClient = await createDBClient({ request });
+  const dbClient = createDBClient({ request });
 
   const today = dayjs().format("YYYY-MM-DD HH:mm:ss.sss");
 
-  return dbClient
+  const { data, error, status } = await dbClient
     .from("events")
     .select("count")
     .lt("start_date", today)
     .gt("end_date", today);
+
+  return json(
+    { data, error },
+    {
+      status,
+    }
+  );
 }
