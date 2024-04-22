@@ -40,7 +40,7 @@ function Button({
   };
   const renderContent = () => (
     <>
-      {preIcon ?? null}
+      {!loading && (preIcon ?? null)}
       {loading && (
         <output>
           <svg
@@ -64,7 +64,7 @@ function Button({
           <span className="sr-only">Loading...</span>
         </output>
       )}
-      <span>{label}</span> {postIcon ?? null}
+      <span>{label}</span> {!loading && (postIcon ?? null)}
     </>
   );
   const classes = `rounded-md py-1.5 px-3.5 cursor-pointer inline-flex justify-center items-center gap-1 min-w-max hover:brightness-90 ${styled()} ${className}`;
