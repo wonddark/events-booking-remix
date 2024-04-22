@@ -69,7 +69,7 @@ export default function App() {
       </head>
       <body className="text-gray-600 text-[14px]">
         {navigation.state === "loading" && (
-          <div className="absolute top-0 right-0 left-0 bottom-0 z-50 backdrop-blur-lg flex justify-center items-center bg-transparent">
+          <div className="fixed top-0 right-0 left-0 bottom-0 z-50 backdrop-blur-lg flex justify-center items-center bg-transparent">
             <div className="p-48 text-primary-500">
               <div className="lds-ripple bg-[#ffffff0a]">
                 <div></div>
@@ -97,6 +97,8 @@ export function ErrorBoundary() {
       switch (error.status) {
         case 404:
           return <NotFoundError />;
+        default:
+          return "Not handled error";
       }
     }
     return <ServerError />;
