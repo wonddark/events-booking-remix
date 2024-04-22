@@ -4,12 +4,13 @@ import {
   MetaFunction,
   redirect,
 } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import { Link, useFetcher, useNavigate } from "@remix-run/react";
 import Button from "~/components/Button";
 import HorizontalLogo from "~/routes/_auth/HorizontalLogo";
 import createDBClient from "~/utils/supabase/server";
 import { getSessionFromCookie } from "~/utils/session";
 import { commitSession } from "~/sessions";
+import { FormEventHandler, useEffect } from "react";
 
 // noinspection JSUnusedGlobalSymbols
 export const meta: MetaFunction = () => {
@@ -57,6 +58,21 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 function Register() {
+  const register = useFetcher<typeof action>();
+  const navigate = useNavigate();
+  const loading = register.state === "submitting";
+
+  const sendData: FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault();
+    register.submit(event.currentTarget);
+  };
+
+  useEffect(() => {
+    if (register.data?.data?.user) {
+      navigate("/login");
+    }
+  }, [register.data]);
+
   return (
     <div className="w-[90%] max-w-[400px] p-2.5 py-5 md:p-9 rounded-xl bg-white shadow-lg">
       <div className="flex justify-center mb-14">
@@ -65,7 +81,11 @@ function Register() {
       <p className="text-center md:text-left text-xl font-bold text-primary-900">
         Create account
       </p>
-      <form className="flex flex-col items-center mt-5 gap-3" method="POST">
+      <form
+        className="flex flex-col items-center mt-5 gap-3"
+        method="POST"
+        onSubmit={sendData}
+      >
         <div className="w-full">
           <label htmlFor="email">Email</label>
           <input
@@ -100,7 +120,12 @@ function Register() {
           conditions
         </label>
         <div className="flex flex-col w-[80%] mt-7">
-          <Button label="Register" type="submit" style="primary" />
+          <Button
+            label="Register"
+            type="submit"
+            style="primary"
+            loading={loading}
+          />
           <p className="text-center mt-4">
             <Link to="/login" className="text-primary-700 hover:brightness-125">
               Login
