@@ -6,11 +6,12 @@ import {
   redirect,
 } from "@remix-run/node";
 import Button from "~/components/Button";
-import { Link, useActionData } from "@remix-run/react";
+import { Link, useFetcher } from "@remix-run/react";
 import HorizontalLogo from "~/routes/_auth/HorizontalLogo";
 import createDBClient from "~/utils/supabase/server";
 import { commitSession } from "~/sessions";
 import { getSessionFromCookie } from "~/utils/session";
+import { FormEventHandler } from "react";
 
 // noinspection JSUnusedGlobalSymbols
 export const meta: MetaFunction = () => {
@@ -80,8 +81,14 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 function Login() {
-  const response = useActionData<typeof action>();
-  const wrongCredentials = Boolean(response?.error);
+  const response = useFetcher<typeof action>();
+  const wrongCredentials = Boolean(response.data?.error);
+  const loginIn = response.state === "submitting";
+
+  const sendCredentials: FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault();
+    response.submit(event.currentTarget);
+  };
 
   return (
     <div className="w-[90%] max-w-[400px] p-2.5 py-5 md:p-9 rounded-xl bg-white shadow-lg">
@@ -91,7 +98,11 @@ function Login() {
       <p className="text-center md:text-left text-xl font-bold text-primary-900">
         Authenticate yourself
       </p>
-      <form className="flex flex-col items-center mt-5 gap-3" method="POST">
+      <form
+        className="flex flex-col items-center mt-5 gap-3"
+        method="POST"
+        onSubmit={sendCredentials}
+      >
         {wrongCredentials && (
           <div
             className="flex items-center p-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 w-full"
@@ -124,7 +135,7 @@ function Login() {
             placeholder="user@email.com"
             id="email"
             name="email"
-            defaultValue={response?.email}
+            defaultValue={response.data?.email ?? ""}
           />
         </div>
         <div className="w-full">
@@ -138,11 +149,16 @@ function Login() {
             }`}
             placeholder="Password"
             name="password"
-            defaultValue={response?.password}
+            defaultValue={response.data?.password ?? ""}
           />
         </div>
         <div className="flex flex-col w-[80%] mt-7">
-          <Button label="Login" type="submit" style="primary" />
+          <Button
+            label="Login"
+            type="submit"
+            style="primary"
+            loading={loginIn}
+          />
           <p className="text-center mt-4">
             <Link
               to="/register"
