@@ -68,7 +68,7 @@ function EventItem({ item, auth }: Props) {
           style="secondary"
           postIcon={<SearchOutlined />}
           onClick={viewDetails}
-          className="w-3/5 ml-0.5"
+          className="w-3/5 mr-0.5"
         />
         {auth && (
           <Button
@@ -76,7 +76,7 @@ function EventItem({ item, auth }: Props) {
             type="button"
             style="primary"
             postIcon={<CheckPlus />}
-            className="w-2/5 mr-0.5"
+            className="w-2/5 ml-0.5"
             onClick={toggleTicketsForm}
           />
         )}
