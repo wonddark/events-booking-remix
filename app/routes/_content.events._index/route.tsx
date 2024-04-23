@@ -30,8 +30,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const { data: events, error, count } = await dbInstance;
   if (error) {
+    console.log(error);
     return json(
-      { events: [], count: 0, custom: "test" },
+      {
+        events: [],
+        count: 0,
+        authUser: Boolean(authorization.session.data.user_id),
+      },
       {
         status: 500,
         headers: { "Set-Cookie": await commitSession(authorization.session) },
@@ -39,13 +44,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
   return json(
-    { events, count, custom: "test" },
+    { events, count, authUser: Boolean(authorization.session.data.user_id) },
     { headers: { "Set-Cookie": await commitSession(authorization.session) } }
   );
 }
 
 export default function Events() {
-  const { events } = useLoaderData<typeof loader>();
+  const { events, authUser } = useLoaderData<typeof loader>();
 
   return (
     <>
@@ -53,7 +58,7 @@ export default function Events() {
         <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5 justify-items-center">
           {events?.map((item) => (
             // @ts-expect-error Insufficient type covered by supabase client
-            <EventItem item={item} key={item.id} />
+            <EventItem item={item} key={item.id} auth={authUser} />
           ))}
         </div>
       ) : null}
