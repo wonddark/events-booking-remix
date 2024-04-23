@@ -62,6 +62,14 @@ function EventItem({ item, auth }: Props) {
         {item.name}
       </Link>
       <div className="mt-7 flex-1 flex justify-end items-end">
+        <Button
+          label="Details"
+          type="button"
+          style="secondary"
+          postIcon={<SearchOutlined />}
+          onClick={viewDetails}
+          className="w-3/5 ml-0.5"
+        />
         {auth && (
           <Button
             label="Book a sit"
@@ -72,14 +80,6 @@ function EventItem({ item, auth }: Props) {
             onClick={toggleTicketsForm}
           />
         )}
-        <Button
-          label="Details"
-          type="button"
-          style="secondary"
-          postIcon={<SearchOutlined />}
-          onClick={viewDetails}
-          className="w-3/5 ml-0.5"
-        />
       </div>
       {showTicketsForm && (
         <registerTicket.Form
