@@ -3,7 +3,13 @@ import SearchOutlined from "~/assets/SearchOutlined";
 import { Database } from "../../database.types";
 import { Link, useFetcher, useNavigate } from "@remix-run/react";
 import CheckPlus from "~/assets/CheckPlus";
-import { FormEventHandler, MouseEventHandler, useState } from "react";
+import {
+  FormEventHandler,
+  MouseEventHandler,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 type Props = Readonly<{
   item: Database["public"]["Tables"]["events"]["Row"] & {
@@ -33,6 +39,13 @@ function EventItem({ item, auth }: Props) {
     event.currentTarget.form?.reset();
     toggleTicketsForm();
   };
+  const formRef = useRef<HTMLFormElement>(null);
+  useEffect(() => {
+    if (registerTicket.data && registerTicket.state === "idle") {
+      formRef.current?.reset();
+      toggleTicketsForm();
+    }
+  }, [registerTicket.data, registerTicket.state]);
 
   return (
     <div className="flex flex-col border border-gray-300 rounded-lg shadow-md hover:shadow p-3 w-full md:w-[280px]">
@@ -73,6 +86,7 @@ function EventItem({ item, auth }: Props) {
           method="post"
           action={`/events/${item.id}/tickets/register`}
           onSubmit={sendRequest}
+          ref={formRef}
         >
           <input
             type="number"
@@ -80,7 +94,11 @@ function EventItem({ item, auth }: Props) {
             max={item.max_attendees - item.tickets[0].count}
             name="tickets_count"
           />
-          <Button label="Ok" type="submit" />
+          <Button
+            label="Ok"
+            type="submit"
+            loading={registerTicket.state === "submitting"}
+          />
           <Button label="Cancel" type="button" onClick={cancelOp} />
         </registerTicket.Form>
       )}
