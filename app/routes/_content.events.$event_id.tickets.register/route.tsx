@@ -26,9 +26,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     user_id: authorization.session.data.user_id,
   });
 
-  const { error, status, statusText } = await dbClient
-    .from("tickets")
-    .insert(payload);
+  const { error, status } = await dbClient.from("tickets").insert(payload);
 
   return json(
     { error },
