@@ -35,7 +35,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       {
         events: [],
         count: 0,
-        authUser: Boolean(authorization.session.data.user_id),
+        userId: authorization.session.data.user_id,
       },
       {
         status: 500,
@@ -44,21 +44,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
   return json(
-    { events, count, authUser: Boolean(authorization.session.data.user_id) },
+    { events, count, userId: authorization.session.data.user_id },
     { headers: { "Set-Cookie": await commitSession(authorization.session) } }
   );
 }
 
 export default function Events() {
-  const { events, authUser } = useLoaderData<typeof loader>();
+  const { events, userId } = useLoaderData<typeof loader>();
 
   return (
     <>
       {events.length > 0 ? (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5 justify-items-center">
           {events?.map((item) => (
-            // @ts-expect-error Insufficient type covered by supabase client
-            <EventItem item={item} key={item.id} auth={authUser} />
+            <EventItem item={item} key={item.id} userId={userId} />
           ))}
         </div>
       ) : null}
