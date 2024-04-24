@@ -3,10 +3,13 @@ import LogoutButton from "~/routes/_content/Header/LogoutButton";
 import LoginButton from "~/routes/_content/Header/LoginButton";
 import CreateEventButton from "~/routes/_content/Header/CreateEventButton";
 
-function Header({
-  query,
-  userId,
-}: Readonly<{ query: string | null; userId: string | undefined }>) {
+type Props = Readonly<{
+  query: string | null;
+  userId: string | undefined;
+  userDisplayName: string | undefined | null;
+}>;
+
+function Header({ query, userId, userDisplayName }: Props) {
   return (
     <header className="border-b border-b-primary-100 sticky top-0 bg-white z-50">
       <div className="max-w-screen-2xl mx-auto px-2.5 lg:px-5 py-3 flex items-center flex-wrap md:flex-nowrap justify-between md:justify-start">
@@ -43,10 +46,19 @@ function Header({
             </div>
           </form>
         </div>
-        <div className="flex gap-x-2 grow-0 order-2 md:order-last">
+        <div className="flex items-center gap-x-2 grow-0 order-2 md:order-last">
           {!userId && <LoginButton />}
           <CreateEventButton />
           {userId && <LogoutButton />}
+          {userDisplayName && (
+            <Link to={`/profiles/${userDisplayName}`}>
+              <img
+                src="/images/user_avatar_placeholder.jpeg"
+                alt="user avatar"
+                className="rounded-full w-5 h-5 object-cover max-w-min"
+              />
+            </Link>
+          )}
         </div>
       </div>
     </header>
