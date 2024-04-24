@@ -16,32 +16,44 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const authorization = await setAuthorization(request, dbClient);
 
   let userId: string | undefined = undefined;
+  let userDisplayImage: string | undefined | null = undefined;
   if (
     !authorization.error &&
     Object.keys(authorization.session.data).length > 0
   ) {
     const { data } = await dbClient.auth.getUser();
     if (data.user) {
+      const { data: profile } = await dbClient
+        .from("profiles")
+        .select()
+        .eq("user_id", data.user.id)
+        .single();
       userId = data.user.id;
+      userDisplayImage = profile?.display_name;
     }
   }
   const url = new URL(request.url);
   const query = url.searchParams.get("query");
 
   return json({
-    user_id: userId,
+    userId,
     query,
+    userDisplayImage,
   });
 };
 
 function ContentLayout() {
-  const { query, user_id } = useLoaderData<typeof loader>();
+  const { query, userId, userDisplayImage } = useLoaderData<typeof loader>();
   const matches = useMatches();
   const { pathname } = useLocation();
 
   return (
     <>
-      <Header query={query} userId={user_id} />
+      <Header
+        query={query}
+        userId={userId}
+        userDisplayName={userDisplayImage}
+      />
       <div className="max-w-screen-2xl mx-auto px-2.5 lg:px-5 w-full my-2.5 text-xs font-light">
         {matches
           .filter((item) => item.handle)
