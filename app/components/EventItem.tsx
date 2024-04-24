@@ -14,13 +14,13 @@ import {
 type Props = Readonly<{
   item: Database["public"]["Tables"]["events"]["Row"] & {
     tickets: { count: number }[];
-    categories: { id: number; name: string };
-    users: { id: number; name: string };
+    categories: Database["public"]["Tables"]["categories"]["Row"];
+    event_owner: Database["public"]["Views"]["event_owner"]["Row"];
   };
-  auth: boolean;
+  userId: string | undefined;
 }>;
 
-function EventItem({ item, auth }: Props) {
+function EventItem({ item, userId }: Props) {
   const navigate = useNavigate();
   const viewDetails = () => {
     navigate(`/events/${item.id}`);
@@ -47,21 +47,54 @@ function EventItem({ item, auth }: Props) {
     }
   }, [registerTicket.data, registerTicket.state]);
 
+  const imgRef = useRef<HTMLImageElement>(null);
+  const avaterRef = useRef<HTMLImageElement>(null);
+
   return (
     <div className="flex flex-col border border-gray-300 rounded-lg shadow-md hover:shadow p-3 w-full md:w-[280px]">
       <div className="-m-3 mb-0">
         <Link to={`/events/${item.id}`}>
           <img
-            src={item.img_url ?? ""}
+            src={
+              item.img_url
+                ? item.img_url
+                : "/images/event_image_placeholder.jpg"
+            }
+            onError={() =>
+              (imgRef.current!.src = "/images/event_image_placeholder.jpg")
+            }
             alt="event_img"
             className="w-full h-[240px] rounded-lg rounded-b-[0] object-cover hover:brightness-105"
+            loading="lazy"
+            ref={imgRef}
           />
         </Link>
       </div>
       <Link to={`/events/${item.id}`} className="font-bold mt-3">
         {item.name}
       </Link>
-      <div className="mt-7 flex-1 flex justify-end items-end">
+      {item.event_owner && (
+        <Link
+          to={`/profiles/${item.event_owner.display_name}`}
+          className="flex items-center justify-start gap-1 mt-3"
+        >
+          <img
+            src={
+              item.event_owner.avatar
+                ? item.event_owner.avatar
+                : "/images/user_avatar_placeholder.jpeg"
+            }
+            onError={() =>
+              (avaterRef.current!.src = "/images/user_avatar_placeholder.jpeg")
+            }
+            ref={avaterRef}
+            alt={`${item.event_owner.display_name} avatar`}
+            className="rounded-full w-5 h-5 object-cover"
+          />
+          {item.event_owner.display_name}
+        </Link>
+      )}
+      <div className="mt-7 flex-1 flex justify-start items-end">
         <Button
           label="Details"
           type="button"
@@ -70,7 +103,7 @@ function EventItem({ item, auth }: Props) {
           onClick={viewDetails}
           className="w-3/5 mr-0.5"
         />
-        {auth && (
+        {userId && item.user_id !== userId && (
           <Button
             label="Book a sit"
             type="button"
@@ -79,6 +112,11 @@ function EventItem({ item, auth }: Props) {
             className="w-2/5 ml-0.5"
             onClick={toggleTicketsForm}
           />
+        )}
+        {userId && item.user_id === userId && (
+          <span className="w-2/5 ml-0.5 py-1.5 px-3.5 border border-transparent text-right">
+            {item.tickets[0].count}
+          </span>
         )}
       </div>
       {showTicketsForm && (
