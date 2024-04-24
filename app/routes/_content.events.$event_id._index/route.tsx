@@ -9,6 +9,7 @@ import Button from "~/components/Button";
 import Pen from "~/assets/Pen";
 import ButtonDeleteEvent from "~/components/ButtonDeleteEvent";
 import { commitSession } from "~/sessions";
+import { useRef } from "react";
 
 // noinspection JSUnusedGlobalSymbols
 export const handle = {
@@ -52,6 +53,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 function ViewEvent() {
   const { event, owner } = useLoaderData<typeof loader>();
+  const imgRef = useRef<HTMLImageElement>(null);
   return (
     <section className="">
       <div className="gap-5 md:gap-16 items-start grid grid-cols-1 md:grid-cols-2">
@@ -82,7 +84,15 @@ function ViewEvent() {
         <div className="">
           <img
             className="w-full rounded-lg"
-            src={event?.img_url ?? ""}
+            src={
+              event?.img_url
+                ? event.img_url
+                : "/images/event_image_placeholder.jpg"
+            }
+            onError={() =>
+              (imgRef.current!.src = "/images/event_image_placeholder.jpg")
+            }
+            ref={imgRef}
             alt={event?.name ?? "event"}
           />
         </div>
