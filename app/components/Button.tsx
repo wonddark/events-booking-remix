@@ -31,7 +31,7 @@ function Button({
       case "primary":
         return "bg-primary-400 text-gray-800";
       case "secondary":
-        return "bg-secondary-100 border border-secondary-300 text-gray-800";
+        return "bg-secondary-100 border-secondary-300 text-gray-800";
       case "danger":
         return "bg-red-100 text-red-900";
       default:
@@ -67,7 +67,7 @@ function Button({
       <span>{label}</span> {!loading && (postIcon ?? null)}
     </>
   );
-  const classes = `rounded-md py-1.5 px-3.5 cursor-pointer inline-flex justify-center items-center gap-1 min-w-max hover:brightness-90 ${styled()} ${className}`;
+  const classes = `rounded-md py-1.5 px-3.5 cursor-pointer inline-flex justify-center items-center gap-1 min-w-max hover:brightness-90 border ${styled()} ${className}`;
   return (
     <>
       {!asLink ? (
