@@ -89,21 +89,21 @@ export type Database = {
       profiles: {
         Row: {
           avatar: string | null
-          display_name: string
+          display_name: string | null
           first_name: string | null
           last_name: string | null
           user_id: string
         }
         Insert: {
           avatar?: string | null
-          display_name: string
+          display_name?: string | null
           first_name?: string | null
           last_name?: string | null
           user_id: string
         }
         Update: {
           avatar?: string | null
-          display_name?: string
+          display_name?: string | null
           first_name?: string | null
           last_name?: string | null
           user_id?: string
@@ -132,9 +132,9 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          event_id?: string
+          event_id: string
           id?: string
-          user_id?: string
+          user_id: string
         }
         Update: {
           event_id?: string
@@ -186,6 +186,36 @@ export type Database = {
           "": unknown
         }
         Returns: string
+      }
+      tickets_for_user_events: {
+        Args: {
+          auth_user: string
+        }
+        Returns: string[]
+      }
+      tickets_registration_check: {
+        Args: {
+          uid: string
+        }
+        Returns: string[]
+      }
+      user_events: {
+        Args: {
+          userid: string
+        }
+        Returns: string[]
+      }
+      user_events_v2: {
+        Args: {
+          user_id: string
+        }
+        Returns: Record<string, unknown>[]
+      }
+      user_own_tickets: {
+        Args: {
+          user_id: string
+        }
+        Returns: string[]
       }
     }
     Enums: {
