@@ -35,6 +35,7 @@ export type Database = {
           name: string
           published_at: string
           start_date: string
+          tickets_count: number | null
           user_id: string
           name_description: string | null
         }
@@ -48,6 +49,7 @@ export type Database = {
           name: string
           published_at?: string
           start_date: string
+          tickets_count?: number | null
           user_id?: string
         }
         Update: {
@@ -60,6 +62,7 @@ export type Database = {
           name?: string
           published_at?: string
           start_date?: string
+          tickets_count?: number | null
           user_id?: string
         }
         Relationships: [
@@ -204,12 +207,6 @@ export type Database = {
           userid: string
         }
         Returns: string[]
-      }
-      user_events_v2: {
-        Args: {
-          user_id: string
-        }
-        Returns: Record<string, unknown>[]
       }
       user_own_tickets: {
         Args: {
