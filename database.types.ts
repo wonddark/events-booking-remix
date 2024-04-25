@@ -35,7 +35,7 @@ export type Database = {
           name: string
           published_at: string
           start_date: string
-          tickets_count: number | null
+          tickets_count: number
           user_id: string
           name_description: string | null
         }
@@ -49,7 +49,7 @@ export type Database = {
           name: string
           published_at?: string
           start_date: string
-          tickets_count?: number | null
+          tickets_count?: number
           user_id?: string
         }
         Update: {
@@ -62,7 +62,7 @@ export type Database = {
           name?: string
           published_at?: string
           start_date?: string
-          tickets_count?: number | null
+          tickets_count?: number
           user_id?: string
         }
         Relationships: [
