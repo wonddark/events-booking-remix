@@ -16,6 +16,7 @@ import "flowbite";
 import { useEffect } from "react";
 import ServerError from "~/components/ServerError";
 import NotFoundError from "~/components/NotFoundError";
+import { ConfigProvider } from "antd";
 
 // noinspection JSUnusedGlobalSymbols
 export const links: LinksFunction = () => [
@@ -79,7 +80,15 @@ export default function App() {
             </div>
           </div>
         )}
-        <Outlet />
+        <ConfigProvider
+          theme={{
+            token: {
+              fontFamily: "Montserrat",
+            },
+          }}
+        >
+          <Outlet />
+        </ConfigProvider>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
