@@ -13,9 +13,8 @@ import {
 
 type Props = Readonly<{
   item: Database["public"]["Tables"]["events"]["Row"] & {
-    tickets: { count: number }[];
-    categories: Database["public"]["Tables"]["categories"]["Row"];
-    event_owner: Database["public"]["Views"]["event_owner"]["Row"];
+    categories: Database["public"]["Tables"]["categories"]["Row"] | null;
+    event_owner: Database["public"]["Views"]["event_owner"]["Row"] | null;
   };
   userId: string | undefined;
 }>;
@@ -115,7 +114,7 @@ function EventItem({ item, userId }: Props) {
         )}
         {userId && item.user_id === userId && (
           <span className="w-2/5 ml-0.5 py-1.5 px-3.5 border border-transparent text-right">
-            {item.tickets[0].count}
+            {item.tickets_count}
           </span>
         )}
       </div>
@@ -129,7 +128,7 @@ function EventItem({ item, userId }: Props) {
           <input
             type="number"
             min={1}
-            max={item.max_attendees - item.tickets[0].count}
+            max={item.max_attendees - item.tickets_count}
             name="tickets_count"
           />
           <Button

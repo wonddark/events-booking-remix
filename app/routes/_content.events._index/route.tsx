@@ -20,7 +20,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const dbInstance = dbClient
     .from("events")
-    .select("*, categories(id, name), tickets(count), event_owner(*)")
+    .select("*, categories(id, name), event_owner(*)")
     .order("published_at", { ascending: false })
     .range((page - 1) * page_size, page * page_size - 1);
 
@@ -30,7 +30,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const { data: events, error, count } = await dbInstance;
   if (error) {
-    console.log(error);
     return json(
       {
         events: [],
