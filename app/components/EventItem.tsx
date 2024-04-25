@@ -12,9 +12,15 @@ import {
 } from "react";
 
 type Props = Readonly<{
-  item: Database["public"]["Tables"]["events"]["Row"] & {
+  item: Pick<
+    Database["public"]["Tables"]["events"]["Row"],
+    "id" | "img_url" | "name" | "tickets_count" | "max_attendees"
+  > & {
     categories: Database["public"]["Tables"]["categories"]["Row"] | null;
-    event_owner: Database["public"]["Views"]["event_owner"]["Row"] | null;
+    event_owner: Pick<
+      Database["public"]["Views"]["event_owner"]["Row"],
+      "user_id" | "avatar" | "display_name"
+    > | null;
   };
   userId: string | undefined;
 }>;
@@ -102,7 +108,7 @@ function EventItem({ item, userId }: Props) {
           onClick={viewDetails}
           className="w-3/5 mr-0.5"
         />
-        {userId && item.user_id !== userId && (
+        {userId && item.event_owner?.user_id !== userId && (
           <Button
             label="Book a sit"
             type="button"
@@ -112,7 +118,7 @@ function EventItem({ item, userId }: Props) {
             onClick={toggleTicketsForm}
           />
         )}
-        {userId && item.user_id === userId && (
+        {userId && item.event_owner?.user_id === userId && (
           <span className="w-2/5 ml-0.5 py-1.5 px-3.5 border border-transparent text-right">
             {item.tickets_count}
           </span>

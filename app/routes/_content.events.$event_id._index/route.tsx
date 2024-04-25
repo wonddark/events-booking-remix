@@ -36,7 +36,9 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     statusText,
   } = await dbClient
     .from("events")
-    .select("*, categories(id, name), event_owner(*)")
+    .select(
+      "id, name, description, img_url, categories(id, name), event_owner(user_id, avatar, display_name)"
+    )
     .eq("id", params.event_id!);
 
   return json(
@@ -45,7 +47,9 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       error,
       status,
       statusText,
-      owner: authorization.session.get("user_id") === event?.[0].user_id,
+      owner:
+        authorization.session.get("user_id") ===
+        event?.[0].event_owner?.user_id,
     },
     { headers: { "Set-Cookie": await commitSession(authorization.session) } }
   );

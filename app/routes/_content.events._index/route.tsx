@@ -20,7 +20,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const dbInstance = dbClient
     .from("events")
-    .select("*, categories(id, name), event_owner(*)")
+    .select(
+      "id, img_url, name, tickets_count, max_attendees, categories(id, name), event_owner(user_id, avatar, display_name)"
+    )
     .order("published_at", { ascending: false })
     .range((page - 1) * page_size, page * page_size - 1);
 
