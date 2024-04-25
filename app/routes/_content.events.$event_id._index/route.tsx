@@ -36,7 +36,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     statusText,
   } = await dbClient
     .from("events")
-    .select("*, categories(id, name), tickets(id, user_id), event_owner(*)")
+    .select("*, categories(id, name), event_owner(*)")
     .eq("id", params.event_id!);
 
   return json(
