@@ -83,7 +83,24 @@ export default function App() {
         <ConfigProvider
           theme={{
             token: {
-              fontFamily: "Montserrat",
+              fontFamily: [
+                "Montserrat",
+                "ui-sans-serif",
+                "system-ui",
+                "-apple-system",
+                "system-ui",
+                "Segoe UI",
+                "Roboto",
+                "Helvetica Neue",
+                "Arial",
+                "Noto Sans",
+                "sans-serif",
+                "Apple Color Emoji",
+                "Segoe UI Emoji",
+                "Segoe UI Symbol",
+                "Noto Color Emoji",
+              ].join(","),
+              fontSize: 14,
             },
           }}
         >
