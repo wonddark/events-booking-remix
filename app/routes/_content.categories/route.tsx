@@ -6,5 +6,9 @@ export async function action({ request }: ActionFunctionArgs) {
   const query = formData.get("category_name") ?? "";
   const dbClient = createDBClient({ request });
 
-  return dbClient.from("categories").select().ilike("name", `%${query}%`);
+  return dbClient
+    .from("categories")
+    .select()
+    .ilike("name", `%${query}%`)
+    .limit(15);
 }
