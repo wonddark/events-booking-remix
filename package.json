@@ -12,6 +12,7 @@
     "supabase-types-gen": "npx supabase gen types typescript --project-id yzsqemypjxpitaraepwu > database.types.ts"
   },
   "dependencies": {
+    "@ant-design/icons": "5.1.0",
     "@remix-run/css-bundle": "^2.9.1",
     "@remix-run/node": "^2.9.1",
     "@remix-run/react": "^2.9.1",
@@ -23,12 +24,14 @@
     "flowbite": "^2.3.0",
     "flowbite-react": "^0.9.0",
     "isbot": "^5.1.4",
+    "lodash.debounce": "^4.0.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "supabase": "^1.163.2"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.9.1",
+    "@types/lodash.debounce": "^4.0.9",
     "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.25",
     "@typescript-eslint/eslint-plugin": "^7.7.1",
