@@ -1,7 +1,8 @@
-import { Link } from "@remix-run/react";
+import { Link, useLocation } from "@remix-run/react";
 import LogoutButton from "~/routes/_content/Header/LogoutButton";
 import LoginButton from "~/routes/_content/Header/LoginButton";
 import CreateEventButton from "~/routes/_content/Header/CreateEventButton";
+import BtnSaveEvent from "~/components/BtnSaveEvent";
 
 type Props = Readonly<{
   query: string | null;
@@ -10,6 +11,10 @@ type Props = Readonly<{
 }>;
 
 function Header({ query, userId, userDisplayName }: Props) {
+  const { pathname } = useLocation();
+  const pathCreateOrEdit =
+    pathname === "/events/create" ||
+    pathname.match(/\/events\/[0-9a-z-]*\/edit/g);
   return (
     <header className="border-b border-b-primary-100 sticky top-0 bg-white z-50">
       <div className="max-w-screen-2xl mx-auto px-2.5 lg:px-5 py-3 flex items-center flex-wrap md:flex-nowrap justify-between md:justify-start">
@@ -48,7 +53,8 @@ function Header({ query, userId, userDisplayName }: Props) {
         </div>
         <div className="flex items-center gap-x-2 grow-0 order-2 md:order-last">
           {!userId && <LoginButton />}
-          <CreateEventButton />
+          {!pathCreateOrEdit && <CreateEventButton />}
+          {pathCreateOrEdit && <BtnSaveEvent />}
           {userId && <LogoutButton />}
           {userDisplayName && (
             <Link to={`/profiles/${userDisplayName}`}>
