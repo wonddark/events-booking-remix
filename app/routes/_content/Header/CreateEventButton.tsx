@@ -1,5 +1,6 @@
-import Button from "~/components/Button";
+import { PlusCircleOutlined } from "@ant-design/icons";
 import { useNavigate } from "@remix-run/react";
+import { Button } from "antd";
 
 function CreateEventButton() {
   //
@@ -10,11 +11,13 @@ function CreateEventButton() {
   //
   return (
     <Button
-      label="Create event"
-      type="button"
-      style="primary"
+      htmlType="button"
+      type="primary"
       onClick={createEvent}
-    />
+      icon={<PlusCircleOutlined />}
+    >
+      Create event
+    </Button>
   );
 }
 

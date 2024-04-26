@@ -5,11 +5,11 @@ import SvgTag from "~/assets/SvgTag";
 import BreadcrumbsLink from "~/components/BreadcrumbsLink";
 import BreadcrumbsPlain from "~/components/BreadcrumbsPlain";
 import { setAuthorization } from "~/utils/session";
-import Button from "~/components/Button";
-import Pen from "~/assets/Pen";
 import ButtonDeleteEvent from "~/components/ButtonDeleteEvent";
 import { commitSession } from "~/sessions";
 import { useRef } from "react";
+import { Button } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 
 // noinspection JSUnusedGlobalSymbols
 export const handle = {
@@ -68,14 +68,12 @@ function ViewEvent() {
           {owner && (
             <div className="flex gap-1.5 -mt-2 mb-2">
               <Button
-                label="Edit"
-                type="button"
-                style="secondary"
-                className="text-sm !py-1 !px-2"
-                preIcon={<Pen />}
-                asLink
+                htmlType="button"
+                icon={<EditOutlined />}
                 href={`/events/${event?.id}/edit`}
-              />
+              >
+                Edit
+              </Button>
               <ButtonDeleteEvent eventId={`${event?.id}`} />
             </div>
           )}

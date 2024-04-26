@@ -1,8 +1,5 @@
-import Button from "~/components/Button";
-import SearchOutlined from "~/assets/SearchOutlined";
 import { Database } from "../../database.types";
 import { Link, useFetcher, useNavigate } from "@remix-run/react";
-import CheckPlus from "~/assets/CheckPlus";
 import {
   FormEventHandler,
   MouseEventHandler,
@@ -10,9 +7,12 @@ import {
   useRef,
   useState,
 } from "react";
-import { Modal } from "antd";
-import Close from "~/assets/Close";
-import Check from "~/assets/Check";
+import { Button, Modal } from "antd";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 
 type Props = Readonly<{
   item: Pick<
@@ -106,22 +106,23 @@ function EventItem({ item, userId }: Props) {
         )}
         <div className="mt-7 flex-1 flex justify-start items-end">
           <Button
-            label="Details"
-            type="button"
-            style="secondary"
-            postIcon={<SearchOutlined />}
+            icon={<SearchOutlined />}
             onClick={viewDetails}
+            htmlType="button"
+            type="default"
             className="w-3/5 mr-0.5"
-          />
+          >
+            Details
+          </Button>
           {userId && item.event_owner?.user_id !== userId && (
             <Button
-              label="Book a sit"
-              type="button"
-              style="primary"
-              postIcon={<CheckPlus />}
+              htmlType="button"
+              type="primary"
               className="w-2/5 ml-0.5"
               onClick={toggleTicketsForm}
-            />
+            >
+              Book a sit
+            </Button>
           )}
           {userId && item.event_owner?.user_id === userId && (
             <span className="w-2/5 ml-0.5 py-1.5 px-3.5 border border-transparent text-right">
@@ -153,19 +154,20 @@ function EventItem({ item, userId }: Props) {
           />
           <div className="flex justify-end items-center gap-2.5">
             <Button
-              label="Cancel"
-              type="button"
-              onClick={cancelOp}
-              style="secondary"
-              preIcon={<Close />}
-            />
-            <Button
-              label="Submit"
-              type="submit"
+              type="primary"
+              htmlType="submit"
               loading={registerTicket.state === "submitting"}
-              style="primary"
-              preIcon={<Check />}
-            />
+              icon={<CheckCircleOutlined />}
+            >
+              Submit
+            </Button>
+            <Button
+              htmlType="button"
+              onClick={cancelOp}
+              icon={<CloseCircleOutlined />}
+            >
+              Cancel
+            </Button>
           </div>
         </registerTicket.Form>
       </Modal>

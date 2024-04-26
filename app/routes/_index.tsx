@@ -1,11 +1,11 @@
 import { Link } from "@remix-run/react";
 import EventSVG from "~/assets/EventSVG";
-import Button from "../components/Button";
 import HomeStatics from "~/components/HomeStatics";
 import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import createDBClient from "~/utils/supabase/server";
 import { setAuthorization } from "~/utils/session";
 import { commitSession, destroySession } from "~/sessions";
+import { Button } from "antd";
 
 // noinspection JSUnusedGlobalSymbols
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -102,11 +102,12 @@ export default function Index() {
                     required
                   />
                   <Button
-                    label="Search"
-                    type="submit"
-                    style="primary"
+                    htmlType="submit"
+                    type="primary"
                     className="absolute end-2.5 bottom-2.5"
-                  />
+                  >
+                    Search
+                  </Button>
                 </div>
               </form>
             </div>

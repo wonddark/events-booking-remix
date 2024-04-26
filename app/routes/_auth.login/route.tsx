@@ -5,13 +5,13 @@ import {
   MetaFunction,
   redirect,
 } from "@remix-run/node";
-import Button from "~/components/Button";
 import { Link, useFetcher } from "@remix-run/react";
 import HorizontalLogo from "~/routes/_auth/HorizontalLogo";
 import createDBClient from "~/utils/supabase/server";
 import { commitSession } from "~/sessions";
 import { getSessionFromCookie } from "~/utils/session";
 import { FormEventHandler } from "react";
+import { Button } from "antd";
 
 // noinspection JSUnusedGlobalSymbols
 export const meta: MetaFunction = () => {
@@ -153,12 +153,9 @@ function Login() {
           />
         </div>
         <div className="flex flex-col w-[80%] mt-7">
-          <Button
-            label="Login"
-            type="submit"
-            style="primary"
-            loading={loginIn}
-          />
+          <Button htmlType="submit" type="primary" loading={loginIn}>
+            Login
+          </Button>
           <p className="text-center mt-4">
             <Link
               to="/register"

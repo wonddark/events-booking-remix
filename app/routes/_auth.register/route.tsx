@@ -5,12 +5,12 @@ import {
   redirect,
 } from "@remix-run/node";
 import { Link, useFetcher, useNavigate } from "@remix-run/react";
-import Button from "~/components/Button";
 import HorizontalLogo from "~/routes/_auth/HorizontalLogo";
 import createDBClient from "~/utils/supabase/server";
 import { getSessionFromCookie } from "~/utils/session";
 import { commitSession } from "~/sessions";
 import { FormEventHandler, useEffect } from "react";
+import { Button } from "antd";
 
 // noinspection JSUnusedGlobalSymbols
 export const meta: MetaFunction = () => {
@@ -120,12 +120,9 @@ function Register() {
           conditions
         </label>
         <div className="flex flex-col w-[80%] mt-7">
-          <Button
-            label="Register"
-            type="submit"
-            style="primary"
-            loading={loading}
-          />
+          <Button htmlType="submit" type="primary" loading={loading}>
+            Register
+          </Button>
           <p className="text-center mt-4">
             <Link to="/login" className="text-primary-700 hover:brightness-125">
               Login

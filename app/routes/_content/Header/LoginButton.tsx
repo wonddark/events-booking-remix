@@ -1,5 +1,5 @@
-import Button from "~/components/Button";
 import { useNavigate } from "@remix-run/react";
+import { Button } from "antd";
 
 function LoginButton() {
   //
@@ -8,7 +8,7 @@ function LoginButton() {
     navigate("/login");
   };
   //
-  return <Button label="Login" type="button" onClick={goLogin} />;
+  return <Button onClick={goLogin}>Login</Button>;
 }
 
 export default LoginButton;
