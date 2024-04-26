@@ -1,79 +1,123 @@
-import { RefObject, useRef, useState } from "react";
+import React, { RefObject, useEffect, useMemo, useRef, useState } from "react";
 import { useFetcher } from "@remix-run/react";
 import { action as categoriesAction } from "~/routes/_content.categories/route";
+import type { SelectProps } from "antd";
+import { Select, Spin } from "antd";
+import debounce from "lodash.debounce";
+
+export interface DebounceSelectProps<ValueType = any>
+  extends Omit<SelectProps<ValueType | ValueType[]>, "options" | "children"> {
+  fetchOptions: (search: string) => Promise<ValueType[]>;
+  debounceTimeout?: number;
+}
+
+function DebounceSelect<
+  ValueType extends {
+    key?: string;
+    label: React.ReactNode;
+    value: string | number;
+  } = any
+>({
+  fetchOptions,
+  debounceTimeout = 800,
+  ...props
+}: Readonly<DebounceSelectProps<ValueType>>) {
+  const [fetching, setFetching] = useState(false);
+  const [options, setOptions] = useState<ValueType[]>([]);
+  const fetchRef = useRef(0);
+
+  const debounceFetcher = useMemo(() => {
+    const loadOptions = (value: string) => {
+      fetchRef.current += 1;
+      const fetchId = fetchRef.current;
+      setOptions([]);
+      setFetching(true);
+
+      fetchOptions(value).then((newOptions) => {
+        if (fetchId !== fetchRef.current) {
+          // for fetch callback order
+          return;
+        }
+
+        setOptions(newOptions);
+        setFetching(false);
+      });
+    };
+
+    return debounce(loadOptions, debounceTimeout);
+  }, [debounceTimeout]);
+
+  return (
+    <Select
+      labelInValue
+      filterOption={false}
+      showSearch
+      onSearch={debounceFetcher}
+      notFoundContent={fetching ? <Spin size="small" /> : null}
+      {...props}
+      options={options}
+    />
+  );
+}
 
 function CategorySelector({
   inputRef,
   defaultValue = "",
+  id,
 }: Readonly<{
   inputRef: RefObject<HTMLInputElement>;
   defaultValue?: string;
+  id?: string;
 }>) {
   const categories = useFetcher<typeof categoriesAction>();
-  const selectCategoryRef = useRef<HTMLInputElement>(null);
-  const [showCombo, setShowCombo] = useState(false);
-  const toggleCombo = () => {
-    setShowCombo((prev) => !prev);
+
+  const newFetch = (query: string) => {
+    const formData = new FormData();
+    formData.append("category_name", query);
+    return fetch(`${document.location.origin}/categories`, {
+      method: "POST",
+      body: formData,
+    })
+      .then(
+        (res) =>
+          res.json() as Promise<{
+            data: { id: string; name: string }[];
+            error: any;
+          }>
+      )
+      .then((data) => {
+        return data.data.map(({ id, name }) => ({
+          value: id,
+          label: name,
+        }));
+      });
   };
 
+  useEffect(() => {
+    const formData = new FormData();
+    formData.append("category_name", defaultValue);
+    categories.submit(formData, { action: "/categories", method: "POST" });
+  }, [defaultValue]);
+
   return (
-    <categories.Form action="/categories" method="POST">
-      <div className="w-full relative">
-        <label htmlFor="event_category" className="text-primary-950">
-          Category{" "}
-          <input
-            type="text"
-            name="category_name"
-            id="event_category"
-            placeholder="Category name"
-            required={false}
-            className={`rounded-lg py-1.5 px-3.5 w-full`}
-            ref={selectCategoryRef}
-            onChange={(event) => {
-              categories.submit(event.target.form);
-              toggleCombo();
-            }}
-            defaultValue={defaultValue}
-          />
-        </label>
-        <div
-          className={`mt-1 rounded-lg border shadow-md z-10 absolute top-full left-0 right-0 bg-white${
-            showCombo ? " block" : " hidden"
-          }`}
-        >
-          <ul className="flex flex-col p-0 m-0">
-            {categories.data?.data && categories.data.data.length > 0 ? (
-              <>
-                {categories.data?.data?.map((category) => (
-                  <li
-                    key={category.id}
-                    className="rounded-lg py-1.5 px-3.5 w-full hover:bg-gray-50"
-                  >
-                    <button
-                      type="button"
-                      className="w-full text-left"
-                      onClick={() => {
-                        selectCategoryRef.current &&
-                          (selectCategoryRef.current.value = category.name);
-                        inputRef.current &&
-                          (inputRef.current.value = category.id);
-                        toggleCombo();
-                      }}
-                    >
-                      {category.name}
-                    </button>
-                  </li>
-                ))}
-              </>
-            ) : (
-              <li className="rounded-lg py-1.5 px-3.5 w-full hover:bg-gray-50 cursor-pointer">
-                <span>Nothing found</span>
-              </li>
-            )}
-          </ul>
-        </div>
-      </div>
-    </categories.Form>
+    <DebounceSelect
+      loading={categories.state === "loading"}
+      showSearch
+      placeholder="Select category"
+      className="w-full"
+      filterOption={false}
+      fetchOptions={newFetch}
+      defaultValue={
+        categories.data?.data
+          ?.filter((item) => item.id === defaultValue)
+          ?.map((item) => ({ value: item.id, label: item.name }))?.[0] ?? null
+      }
+      id={id}
+      onChange={(e) => {
+        inputRef.current!.value = (e as { value: string }).value;
+      }}
+      allowClear
+    />
   );
 }
 
