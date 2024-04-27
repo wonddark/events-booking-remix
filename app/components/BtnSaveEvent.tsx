@@ -1,7 +1,8 @@
 import { useFetcher, useLocation, useParams } from "@remix-run/react";
-import { CheckCircleOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import { useRef } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 
 function BtnSaveEvent() {
   const saveEvent = useFetcher();
@@ -14,7 +15,7 @@ function BtnSaveEvent() {
       : `/events/${params.event_id}/edit`;
   return (
     <Button
-      icon={<CheckCircleOutlined />}
+      icon={<FontAwesomeIcon icon={faCircleCheck} />}
       htmlType="submit"
       type="primary"
       form="event-form"

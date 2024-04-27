@@ -1,5 +1,7 @@
 import { useNavigate } from "@remix-run/react";
 import { Button } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRightToBracket } from "@fortawesome/free-solid-svg-icons";
 
 function LoginButton() {
   //
@@ -8,7 +10,14 @@ function LoginButton() {
     navigate("/login");
   };
   //
-  return <Button onClick={goLogin}>Login</Button>;
+  return (
+    <Button
+      onClick={goLogin}
+      icon={<FontAwesomeIcon icon={faArrowRightToBracket} />}
+    >
+      Login
+    </Button>
+  );
 }
 
 export default LoginButton;

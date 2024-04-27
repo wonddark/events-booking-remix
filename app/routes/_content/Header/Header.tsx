@@ -3,6 +3,9 @@ import LogoutButton from "~/routes/_content/Header/LogoutButton";
 import LoginButton from "~/routes/_content/Header/LoginButton";
 import CreateEventButton from "~/routes/_content/Header/CreateEventButton";
 import BtnSaveEvent from "~/components/BtnSaveEvent";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import { Button } from "antd";
 
 type Props = Readonly<{
   query: string | null;
@@ -16,9 +19,9 @@ function Header({ query, userId, userDisplayName }: Props) {
     pathname === "/events/create" ||
     pathname.match(/\/events\/[0-9a-z-]*\/edit/g);
   return (
-    <header className="border-b border-b-primary-100 sticky top-0 z-50 bg-primary-500">
+    <header className="border-b border-b-primary-600 sticky top-0 z-50 bg-primary-500 shadow-lg">
       <div className="max-w-screen-2xl mx-auto px-2.5 lg:px-5 py-3 flex items-center flex-wrap md:flex-nowrap justify-between md:justify-start">
-        <Link to="/" className="grow-0 order-1">
+        <Link to={userId ? "/events" : "/"} className="grow-0 order-1">
           EB
         </Link>
         <div className="grow md:pl-5 md:pr-20 order-last md:order-2 w-full mt-3 md:mt-0">
@@ -52,18 +55,23 @@ function Header({ query, userId, userDisplayName }: Props) {
           </form>
         </div>
         <div className="flex items-center gap-x-2 grow-0 order-2 md:order-last">
+          <Button
+            href="/events"
+            type="link"
+            className="text-white hover:!text-primary-100"
+          >
+            Events
+          </Button>
           {!userId && <LoginButton />}
           {!pathCreateOrEdit && <CreateEventButton />}
           {pathCreateOrEdit && <BtnSaveEvent />}
           {userId && <LogoutButton />}
           {userDisplayName && (
-            <Link to={`/profiles/${userDisplayName}`}>
-              <img
-                src="/images/user_avatar_placeholder.jpeg"
-                alt="user avatar"
-                className="rounded-full w-5 h-5 object-cover max-w-min"
-              />
-            </Link>
+            <Button
+              href={`/profiles/${userDisplayName}`}
+              icon={<FontAwesomeIcon icon={faCircleUser} />}
+              shape="circle"
+            />
           )}
         </div>
       </div>
