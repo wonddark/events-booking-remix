@@ -70,7 +70,7 @@ function EventItem({ item, userId }: Props) {
 
   return (
     <>
-      <div className="flex flex-col border border-gray-300 rounded-lg shadow-md hover:shadow p-3 w-full md:w-[280px] bg-primary-50">
+      <div className="flex flex-col border border-gray-300 rounded-lg shadow-md hover:shadow p-3 w-full md:w-[280px] bg-primary-50 hover:brightness-105">
         <div className="-m-3 mb-0">
           <Link to={`/events/${item.id}`}>
             <img
@@ -83,7 +83,7 @@ function EventItem({ item, userId }: Props) {
                 (imgRef.current!.src = "/images/event_image_placeholder.jpg")
               }
               alt="event_img"
-              className="w-full h-[240px] rounded-lg rounded-b-[0] object-cover hover:brightness-105"
+              className="w-full h-[240px] rounded-lg rounded-b-[0] object-cover"
               loading="lazy"
               ref={imgRef}
             />
