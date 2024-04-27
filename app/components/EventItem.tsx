@@ -9,11 +9,12 @@ import {
 } from "react";
 import { Button, Modal } from "antd";
 import {
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
-import { faCalendarDays, faTicket } from "@fortawesome/free-solid-svg-icons";
+  faCalendarDays,
+  faCircleCheck,
+  faCircleXmark,
+  faMagnifyingGlass,
+  faTicket,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import dayjs from "dayjs";
 
@@ -139,7 +140,7 @@ function EventItem({ item, userId }: Props) {
         </div>
         <div className="mt-7 flex-1 flex justify-start items-end">
           <Button
-            icon={<SearchOutlined />}
+            icon={<FontAwesomeIcon icon={faMagnifyingGlass} size="xs" />}
             onClick={viewDetails}
             htmlType="button"
             type="default"
@@ -188,14 +189,14 @@ function EventItem({ item, userId }: Props) {
               type="primary"
               htmlType="submit"
               loading={registerTicket.state === "submitting"}
-              icon={<CheckCircleOutlined />}
+              icon={<FontAwesomeIcon icon={faCircleCheck} />}
             >
               Submit
             </Button>
             <Button
               htmlType="button"
               onClick={cancelOp}
-              icon={<CloseCircleOutlined />}
+              icon={<FontAwesomeIcon icon={faCircleXmark} />}
             >
               Cancel
             </Button>
