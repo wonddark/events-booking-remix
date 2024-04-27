@@ -1,15 +1,16 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import createDBClient from "~/utils/supabase/server";
-import EventItem from "~/components/EventItem";
 import * as process from "node:process";
 import { setAuthorization } from "~/utils/session";
 import { commitSession } from "~/sessions";
+import EventsGrid from "~/components/EventsGrid";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const searchParams = url.searchParams;
   const query = searchParams.get("query");
+  const categoryId = searchParams.get("category_id");
   const page = Number(searchParams.get("page") ?? 1);
   const page_size = Number(
     searchParams.get("page_size") ?? process.env.DEFAULT_PAGE_SIZE
@@ -29,6 +30,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   if (query) {
     dbInstance.textSearch("name_description", `${query}`);
+  }
+
+  if (categoryId) {
+    dbInstance.eq("category_id", categoryId);
   }
 
   const { data: events, error, count } = await dbInstance;
@@ -54,15 +59,5 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function Events() {
   const { events, userId } = useLoaderData<typeof loader>();
 
-  return (
-    <>
-      {events.length > 0 ? (
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5 justify-items-center">
-          {events?.map((item) => (
-            <EventItem item={item} key={item.id} userId={userId} />
-          ))}
-        </div>
-      ) : null}
-    </>
-  );
+  return <EventsGrid events={events} userId={userId} />;
 }
