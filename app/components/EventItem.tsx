@@ -16,7 +16,7 @@ import {
   faTicket,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import dayjs from "dayjs";
+import EventItemDates from "~/components/EventItemDates";
 
 type Props = Readonly<{
   item: Pick<
@@ -66,12 +66,7 @@ function EventItem({ item, userId }: Props) {
   }, [registerTicket.data, registerTicket.state]);
 
   const imgRef = useRef<HTMLImageElement>(null);
-  const avaterRef = useRef<HTMLImageElement>(null);
-
-  const [isPending, setIsPending] = useState(true);
-  useEffect(() => {
-    setIsPending(dayjs().isBefore(item.start_date));
-  }, []);
+  const avatarRef = useRef<HTMLImageElement>(null);
 
   return (
     <>
@@ -109,10 +104,10 @@ function EventItem({ item, userId }: Props) {
                   : "/images/user_avatar_placeholder.jpeg"
               }
               onError={() =>
-                (avaterRef.current!.src =
+                (avatarRef.current!.src =
                   "/images/user_avatar_placeholder.jpeg")
               }
-              ref={avaterRef}
+              ref={avatarRef}
               alt={`${item.event_owner.display_name} avatar`}
               className="rounded-full w-5 h-5 object-cover"
             />
@@ -121,17 +116,7 @@ function EventItem({ item, userId }: Props) {
         )}
         <div className="flex gap-2 items-center">
           <FontAwesomeIcon icon={faCalendarDays} />
-          {isPending ? (
-            <div className="flex items-center gap-1">
-              <span>{dayjs(item.start_date).format("MM-DD HH:mm")}</span>
-              <span>-</span>
-              <span>{dayjs(item.end_date).format("MM-DD HH:mm")}</span>
-            </div>
-          ) : (
-            <div>
-              Running now until {dayjs(item.end_date).format("MM-DD HH:mm")}
-            </div>
-          )}
+          <EventItemDates event={item} />
         </div>
         <div className="flex gap-2 items-center font-bold py-1.5">
           <FontAwesomeIcon icon={faTicket} />
