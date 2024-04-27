@@ -13,11 +13,20 @@ import {
   CloseCircleOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
+import { faCalendarDays, faTicket } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import dayjs from "dayjs";
 
 type Props = Readonly<{
   item: Pick<
     Database["public"]["Tables"]["events"]["Row"],
-    "id" | "img_url" | "name" | "tickets_count" | "max_attendees"
+    | "id"
+    | "img_url"
+    | "name"
+    | "tickets_count"
+    | "max_attendees"
+    | "start_date"
+    | "end_date"
   > & {
     categories: Database["public"]["Tables"]["categories"]["Row"] | null;
     event_owner: Pick<
@@ -104,7 +113,22 @@ function EventItem({ item, userId }: Props) {
             {item.event_owner.display_name}
           </Link>
         )}
-        <div className="font-bold py-1.5">
+        <div className="flex gap-2 items-center">
+          <FontAwesomeIcon icon={faCalendarDays} />
+          {dayjs().isBefore(item.start_date) ? (
+            <div className="flex items-center gap-1">
+              <span>{dayjs(item.start_date).format("MM-DD HH:mm")}</span>
+              <span>-</span>
+              <span>{dayjs(item.end_date).format("MM-DD HH:mm")}</span>
+            </div>
+          ) : (
+            <div>
+              Running now until {dayjs(item.end_date).format("MM-DD HH:mm")}
+            </div>
+          )}
+        </div>
+        <div className="flex gap-2 items-center font-bold py-1.5">
+          <FontAwesomeIcon icon={faTicket} />
           {item.tickets_count !== item.max_attendees ? (
             <span className="text-green-800">
               {item.max_attendees - item.tickets_count} tickets available
