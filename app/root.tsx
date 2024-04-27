@@ -101,6 +101,7 @@ export default function App() {
                 "Noto Color Emoji",
               ].join(","),
               fontSize: 14,
+              colorPrimary: "#0d9488",
             },
           }}
         >
