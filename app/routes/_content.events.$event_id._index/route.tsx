@@ -1,6 +1,6 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
 import createDBClient from "~/utils/supabase/server";
-import { UIMatch, useLoaderData } from "@remix-run/react";
+import { Link, UIMatch, useLoaderData } from "@remix-run/react";
 import BreadcrumbsLink from "~/components/BreadcrumbsLink";
 import BreadcrumbsPlain from "~/components/BreadcrumbsPlain";
 import { setAuthorization } from "~/utils/session";
@@ -107,13 +107,19 @@ function ViewEvent() {
               <h2 className="mb-2 text-xl lg:text-2xl tracking-tight font-bold">
                 {event?.name}
               </h2>
-              <Button
-                icon={<FontAwesomeIcon icon={faFolderTree} />}
-                size="small"
-                className="mb-4"
+              <Link
+                to={`/categories/${event.categories?.id}`}
+                className="inline-block mb-4 h-6 py-0 px-[7px] rounded outline-none whitespace-nowrap text-center
+                 border border-[#d9d9d9] text-[rgba(0, 0, 0, 0.88)] shadow-[0_2px_0_rgba(0,0,0,0.02)] font-normal
+                  leading-[1.5714285714285714] text-[0.875rem] bg-white transition-all duration-[0.2s]
+                   ease-[cubic-bezier(0.645,0.045,0.355,1)] hover:text-[#28a193] hover:border-[#28a193]"
               >
-                {event.categories?.name}
-              </Button>
+                <FontAwesomeIcon
+                  icon={faFolderTree}
+                  className="h-[1em] align-[-0.125em] inline-block box-content me-2 leading-[0]"
+                />
+                <span>{event.categories?.name}</span>
+              </Link>
               <p className="mb-4">{event?.description}</p>
             </div>
             <div className="md:pl-3 lg:px-7">
