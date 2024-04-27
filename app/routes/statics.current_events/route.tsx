@@ -11,7 +11,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .from("events")
     .select("count")
     .lt("start_date", today)
-    .gt("end_date", today);
+    .gt("end_date", today)
+    .single();
 
   return json(
     { data, error },

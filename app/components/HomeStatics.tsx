@@ -22,7 +22,7 @@ function HomeStatics() {
         <div className="mb-3 md:mt-7">
           {currentEvents.state === "idle" ? (
             <span className="text-5xl md:text-8xl text-primary-800">
-              {(currentEvents.data && currentEvents.data.data?.[0]?.count) ?? 0}
+              {(currentEvents.data && currentEvents.data.data?.count) ?? 0}
             </span>
           ) : (
             <span>Loading...</span>
@@ -39,7 +39,7 @@ function HomeStatics() {
         <div className="mb-3 md:mt-7">
           {soonEvents.state === "idle" ? (
             <span className="text-5xl md:text-8xl text-primary-800">
-              {(soonEvents.data && soonEvents.data.data?.[0]?.count) ?? 0}
+              {(soonEvents.data && soonEvents.data.data?.count) ?? 0}
             </span>
           ) : (
             <span>Loading...</span>
@@ -56,7 +56,7 @@ function HomeStatics() {
         <div className="mb-3 md:mt-7">
           {recentEvents.state === "idle" ? (
             <span className="text-5xl md:text-8xl text-primary-800">
-              {(recentEvents.data && recentEvents.data.data?.[0]?.count) ?? 0}
+              {(recentEvents.data && recentEvents.data.data?.count) ?? 0}
             </span>
           ) : (
             <span>Loading...</span>

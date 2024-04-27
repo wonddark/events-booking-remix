@@ -11,7 +11,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .gt(
       "published_at",
       dayjs().subtract(72, "hours").format("YYYY-MM-DD HH:mm:ss.sss")
-    );
+    )
+    .single();
 
   return json(
     { data, error },

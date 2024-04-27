@@ -10,7 +10,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const { data, error, status } = await dbClient
     .from("events")
     .select("count")
-    .gt("start_date", today);
+    .gt("start_date", today)
+    .single();
 
   return json({ data, error }, { status });
 }
