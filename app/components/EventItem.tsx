@@ -1,4 +1,3 @@
-import { Database } from "../../database.types";
 import { Link, useFetcher, useNavigate } from "@remix-run/react";
 import {
   FormEventHandler,
@@ -17,24 +16,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import EventItemDates from "~/components/EventItemDates";
+import { EventElement } from "~/types/events";
 
 type Props = Readonly<{
-  item: Pick<
-    Database["public"]["Tables"]["events"]["Row"],
-    | "id"
-    | "img_url"
-    | "name"
-    | "tickets_count"
-    | "max_attendees"
-    | "start_date"
-    | "end_date"
-  > & {
-    categories: Database["public"]["Tables"]["categories"]["Row"] | null;
-    event_owner: Pick<
-      Database["public"]["Views"]["event_owner"]["Row"],
-      "user_id" | "avatar" | "display_name"
-    > | null;
-  };
+  item: EventElement;
   userId: string | undefined;
 }>;
 
