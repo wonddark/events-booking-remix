@@ -68,6 +68,11 @@ function EventItem({ item, userId }: Props) {
   const imgRef = useRef<HTMLImageElement>(null);
   const avaterRef = useRef<HTMLImageElement>(null);
 
+  const [isPending, setIsPending] = useState(true);
+  useEffect(() => {
+    setIsPending(dayjs().isBefore(item.start_date));
+  }, []);
+
   return (
     <>
       <div className="flex flex-col border border-gray-300 rounded-lg shadow-md hover:shadow p-3 w-full md:w-[280px] bg-primary-50 hover:brightness-105">
@@ -116,7 +121,7 @@ function EventItem({ item, userId }: Props) {
         )}
         <div className="flex gap-2 items-center">
           <FontAwesomeIcon icon={faCalendarDays} />
-          {dayjs().isBefore(item.start_date) ? (
+          {isPending ? (
             <div className="flex items-center gap-1">
               <span>{dayjs(item.start_date).format("MM-DD HH:mm")}</span>
               <span>-</span>
