@@ -57,14 +57,18 @@ function Header({ query, userId, userDisplayName }: Props) {
         <div className="flex items-center gap-x-2 grow-0 order-2 md:order-last">
           <Link
             to="/events"
-            className="h-8 py-1 px-3.5 text-teal-500 hover:brightness-125 font-bold"
+            className="h-8 py-1 px-3.5 text-teal-500 hover:brightness-125 font-bold hidden md:inline-block"
           >
             Events
           </Link>
           {!userId && <LoginButton />}
           {!pathCreateOrEdit && <CreateEventButton />}
           {pathCreateOrEdit && <BtnSaveEvent />}
-          {userId && <LogoutButton />}
+          {userId && (
+            <div className="hidden md:inline-block">
+              <LogoutButton />
+            </div>
+          )}
           {userDisplayName && (
             <Button
               href={`/profiles/${userDisplayName}`}
