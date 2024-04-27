@@ -2,6 +2,9 @@ import { LoaderFunctionArgs } from "@remix-run/node";
 import createDBClient from "~/utils/supabase/server";
 import { useLoaderData } from "@remix-run/react";
 import NotFoundError from "~/components/NotFoundError";
+import { faFolderTree } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import CategoryEvents from "~/components/CategoryEvents";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const dbClient = createDBClient({ request });
@@ -15,14 +18,19 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 function CategoryPage() {
   const { data } = useLoaderData<typeof loader>();
+
   return (
     <section>
       {data ? (
-        <h2>{data.name}</h2>
+        <>
+          <h2 className="text-2xl font-bold mb-3">
+            <FontAwesomeIcon icon={faFolderTree} className="mr-2" />
+            {data.name}
+          </h2>
+          <CategoryEvents categoryId={data.id} />
+        </>
       ) : (
-        <div>
-          <NotFoundError />
-        </div>
+        <NotFoundError />
       )}
     </section>
   );
