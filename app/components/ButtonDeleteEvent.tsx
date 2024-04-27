@@ -2,7 +2,8 @@ import { useFetcher, useNavigate } from "@remix-run/react";
 import { action } from "~/routes/_content.events.$event_id.delete/route";
 import { useEffect } from "react";
 import { Button } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function ButtonDeleteEvent({ eventId }: Readonly<{ eventId: string }>) {
   const deleteFetcher = useFetcher<typeof action>();
@@ -29,12 +30,11 @@ function ButtonDeleteEvent({ eventId }: Readonly<{ eventId: string }>) {
   return (
     <Button
       htmlType="button"
-      type="primary"
       danger
-      className="text-sm !py-1 !px-2"
-      icon={<DeleteOutlined />}
+      icon={<FontAwesomeIcon icon={faTrashCan} />}
       onClick={submitDelete}
       loading={deleteFetcher.state === "loading"}
+      size="small"
     >
       Delete
     </Button>
