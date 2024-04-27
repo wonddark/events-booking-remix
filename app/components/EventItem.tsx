@@ -11,6 +11,7 @@ import {
   faCalendarDays,
   faCircleCheck,
   faCircleXmark,
+  faFolderTree,
   faMagnifyingGlass,
   faTicket,
 } from "@fortawesome/free-solid-svg-icons";
@@ -19,14 +20,14 @@ import EventItemDates from "~/components/EventItemDates";
 import { EventElement } from "~/types/events";
 
 type Props = Readonly<{
-  item: EventElement;
+  event: EventElement;
   userId: string | undefined;
 }>;
 
-function EventItem({ item, userId }: Props) {
+function EventItem({ event, userId }: Props) {
   const navigate = useNavigate();
   const viewDetails = () => {
-    navigate(`/events/${item.id}`);
+    navigate(`/events/${event.id}`);
   };
 
   const [showTicketsForm, setShowTicketsForm] = useState(false);
@@ -57,11 +58,11 @@ function EventItem({ item, userId }: Props) {
     <>
       <div className="flex flex-col border border-gray-300 rounded-lg shadow-md hover:shadow p-3 w-full md:w-[280px] bg-primary-50 hover:brightness-105">
         <div className="-m-3 mb-0">
-          <Link to={`/events/${item.id}`}>
+          <Link to={`/events/${event.id}`}>
             <img
               src={
-                item.img_url
-                  ? item.img_url
+                event.img_url
+                  ? event.img_url
                   : "/images/event_image_placeholder.jpg"
               }
               onError={() =>
@@ -74,18 +75,31 @@ function EventItem({ item, userId }: Props) {
             />
           </Link>
         </div>
-        <Link to={`/events/${item.id}`} className="font-bold mt-3">
-          {item.name}
+        <Link to={`/events/${event.id}`} className="font-bold mt-3">
+          {event.name}
         </Link>
-        {item.event_owner && (
+        <Link
+          to={`/categories/${event.categories?.id}`}
+          className="inline-block mt-2 mb-4 h-6 py-0 px-[7px] rounded outline-none whitespace-nowrap text-center
+                 border border-[#d9d9d9] text-[rgba(0, 0, 0, 0.88)] shadow-[0_2px_0_rgba(0,0,0,0.02)] font-normal
+                  leading-[1.5714285714285714] text-[0.875rem] bg-white transition-all duration-[0.2s]
+                   ease-[cubic-bezier(0.645,0.045,0.355,1)] hover:text-[#28a193] hover:border-[#28a193] w-fit"
+        >
+          <FontAwesomeIcon
+            icon={faFolderTree}
+            className="h-[1em] align-[-0.125em] inline-block box-content me-2 leading-[0]"
+          />
+          <span>{event.categories?.name}</span>
+        </Link>
+        {event.event_owner && (
           <Link
-            to={`/profiles/${item.event_owner.display_name}`}
+            to={`/profiles/${event.event_owner.display_name}`}
             className="flex items-center justify-start gap-1 mt-3"
           >
             <img
               src={
-                item.event_owner.avatar
-                  ? item.event_owner.avatar
+                event.event_owner.avatar
+                  ? event.event_owner.avatar
                   : "/images/user_avatar_placeholder.jpeg"
               }
               onError={() =>
@@ -93,21 +107,21 @@ function EventItem({ item, userId }: Props) {
                   "/images/user_avatar_placeholder.jpeg")
               }
               ref={avatarRef}
-              alt={`${item.event_owner.display_name} avatar`}
+              alt={`${event.event_owner.display_name} avatar`}
               className="rounded-full w-5 h-5 object-cover"
             />
-            {item.event_owner.display_name}
+            {event.event_owner.display_name}
           </Link>
         )}
         <div className="flex gap-2 items-center">
           <FontAwesomeIcon icon={faCalendarDays} />
-          <EventItemDates event={item} />
+          <EventItemDates event={event} />
         </div>
         <div className="flex gap-2 items-center font-bold py-1.5">
           <FontAwesomeIcon icon={faTicket} />
-          {item.tickets_count !== item.max_attendees ? (
+          {event.tickets_count !== event.max_attendees ? (
             <span className="text-green-800">
-              {item.max_attendees - item.tickets_count} tickets available
+              {event.max_attendees - event.tickets_count} tickets available
             </span>
           ) : (
             <span className="text-red-900">No tickets available</span>
@@ -130,8 +144,8 @@ function EventItem({ item, userId }: Props) {
             onClick={toggleTicketsForm}
             disabled={
               !userId ||
-              item.event_owner?.user_id === userId ||
-              item.tickets_count === item.max_attendees
+              event.event_owner?.user_id === userId ||
+              event.tickets_count === event.max_attendees
             }
           >
             Book a sit
@@ -148,14 +162,14 @@ function EventItem({ item, userId }: Props) {
       >
         <registerTicket.Form
           method="post"
-          action={`/events/${item.id}/tickets/register`}
+          action={`/events/${event.id}/tickets/register`}
           onSubmit={sendRequest}
           ref={formRef}
         >
           <input
             type="number"
             min={1}
-            max={item.max_attendees - item.tickets_count}
+            max={event.max_attendees - event.tickets_count}
             name="tickets_count"
             className="w-full p-2 rounded-md mb-5"
           />
