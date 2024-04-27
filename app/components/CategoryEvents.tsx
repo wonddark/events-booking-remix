@@ -17,12 +17,12 @@ function CategoryEvents({ categoryId }: Readonly<{ categoryId: string }>) {
       {events.data && (
         <EventsGrid events={events.data.events} userId={events.data.userId} />
       )}
-      {events.state !== "loading" && (
-        <div className="w-screen h-screen flex items-center justify-center">
+      {events.state === "loading" && (
+        <div className="w-full h-screen flex items-center justify-center">
           <FontAwesomeIcon
             icon={faSpinner}
             spinPulse
-            className="max-w-xs w-7/12 h-auto ms-auto me-auto"
+            className="max-w-xs w-7/12 h-auto ms-auto me-auto text-primary-500"
           />
         </div>
       )}
