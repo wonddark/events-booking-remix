@@ -65,7 +65,12 @@ function ContentLayout() {
                   currentPath: boolean
                 ) => ReactNode;
               }
-            ).breadcrumbs(item, item.pathname === pathname)
+            ).breadcrumbs(
+              item,
+              item.pathname === pathname ||
+                (item.id.endsWith("_index") &&
+                  item.pathname.slice(0, -1) === pathname)
+            )
           )}
       </div>
       <div className="max-w-screen-2xl mx-auto px-2.5 lg:px-5 pb-5">
