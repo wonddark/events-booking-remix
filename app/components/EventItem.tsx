@@ -104,6 +104,15 @@ function EventItem({ item, userId }: Props) {
             {item.event_owner.display_name}
           </Link>
         )}
+        <div className="font-bold py-1.5">
+          {item.tickets_count !== item.max_attendees ? (
+            <span className="text-green-800">
+              {item.max_attendees - item.tickets_count} tickets available
+            </span>
+          ) : (
+            <span className="text-red-900">No tickets available</span>
+          )}
+        </div>
         <div className="mt-7 flex-1 flex justify-start items-end">
           <Button
             icon={<SearchOutlined />}
@@ -114,21 +123,19 @@ function EventItem({ item, userId }: Props) {
           >
             Details
           </Button>
-          {userId && item.event_owner?.user_id !== userId && (
-            <Button
-              htmlType="button"
-              type="primary"
-              className="w-2/5 ml-0.5"
-              onClick={toggleTicketsForm}
-            >
-              Book a sit
-            </Button>
-          )}
-          {userId && item.event_owner?.user_id === userId && (
-            <span className="w-2/5 ml-0.5 py-1.5 px-3.5 border border-transparent text-right">
-              {item.tickets_count}
-            </span>
-          )}
+          <Button
+            htmlType="button"
+            type="primary"
+            className="w-2/5 ml-0.5"
+            onClick={toggleTicketsForm}
+            disabled={
+              !userId ||
+              item.event_owner?.user_id === userId ||
+              item.tickets_count === item.max_attendees
+            }
+          >
+            Book a sit
+          </Button>
         </div>
       </div>
       <Modal
