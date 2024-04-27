@@ -60,7 +60,7 @@ function EventItem({ item, userId }: Props) {
 
   return (
     <>
-      <div className="flex flex-col border border-gray-300 rounded-lg shadow-md hover:shadow p-3 w-full md:w-[280px]">
+      <div className="flex flex-col border border-gray-300 rounded-lg shadow-md hover:shadow p-3 w-full md:w-[280px] bg-primary-50">
         <div className="-m-3 mb-0">
           <Link to={`/events/${item.id}`}>
             <img
