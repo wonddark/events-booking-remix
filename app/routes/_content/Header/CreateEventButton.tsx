@@ -1,6 +1,7 @@
-import { PlusCircleOutlined } from "@ant-design/icons";
 import { useNavigate } from "@remix-run/react";
 import { Button } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 
 function CreateEventButton() {
   //
@@ -14,7 +15,7 @@ function CreateEventButton() {
       htmlType="button"
       type="primary"
       onClick={createEvent}
-      icon={<PlusCircleOutlined />}
+      icon={<FontAwesomeIcon icon={faCirclePlus} />}
     >
       Create event
     </Button>
