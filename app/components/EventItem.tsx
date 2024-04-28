@@ -91,15 +91,15 @@ function EventItem({ event, userId }: Props) {
           />
           <span>{event.categories?.name}</span>
         </Link>
-        {event.event_owner && (
+        {event.profiles && (
           <Link
-            to={`/profiles/${event.event_owner.display_name}`}
+            to={`/profiles/${event.profiles.display_name}`}
             className="flex items-center justify-start gap-1 mt-3"
           >
             <img
               src={
-                event.event_owner.avatar
-                  ? event.event_owner.avatar
+                event.profiles.avatar
+                  ? event.profiles.avatar
                   : "/images/user_avatar_placeholder.jpeg"
               }
               onError={() =>
@@ -107,10 +107,10 @@ function EventItem({ event, userId }: Props) {
                   "/images/user_avatar_placeholder.jpeg")
               }
               ref={avatarRef}
-              alt={`${event.event_owner.display_name} avatar`}
+              alt={`${event.profiles.display_name} avatar`}
               className="rounded-full w-5 h-5 object-cover"
             />
-            {event.event_owner.display_name}
+            {event.profiles.display_name}
           </Link>
         )}
         <div className="flex gap-2 items-center">
@@ -144,7 +144,7 @@ function EventItem({ event, userId }: Props) {
             onClick={toggleTicketsForm}
             disabled={
               !userId ||
-              event.event_owner?.user_id === userId ||
+              event.profiles?.user_id === userId ||
               event.tickets_count === event.max_attendees
             }
           >
