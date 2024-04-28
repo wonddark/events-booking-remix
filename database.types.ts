@@ -50,7 +50,7 @@ export type Database = {
           published_at?: string
           start_date: string
           tickets_count?: number
-          user_id?: string
+          user_id: string
         }
         Update: {
           category_id?: string
@@ -67,24 +67,17 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "events_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
             foreignKeyName: "public_Events_category_id_fkey"
             columns: ["category_id"]
             isOneToOne: false
             referencedRelation: "categories"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_Events_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "event_owner"
-            referencedColumns: ["user_id"]
-          },
-          {
-            foreignKeyName: "public_Events_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -111,22 +104,7 @@ export type Database = {
           last_name?: string | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "public_Users_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "event_owner"
-            referencedColumns: ["user_id"]
-          },
-          {
-            foreignKeyName: "public_Users_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       tickets: {
         Row: {
@@ -156,13 +134,6 @@ export type Database = {
             foreignKeyName: "public_Tickets_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "event_owner"
-            referencedColumns: ["user_id"]
-          },
-          {
-            foreignKeyName: "public_Tickets_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -170,18 +141,7 @@ export type Database = {
       }
     }
     Views: {
-      event_owner: {
-        Row: {
-          avatar: string | null
-          display_name: string | null
-          first_name: string | null
-          last_name: string | null
-          user_email: string | null
-          user_id: string | null
-          user_phone: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       name_description: {
