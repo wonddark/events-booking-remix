@@ -45,7 +45,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     .from("events")
     .select(
       `id, name, description, img_url, start_date, end_date, max_attendees, tickets_count,
-        categories(id, name), event_owner(user_id, avatar, display_name, first_name, last_name)`
+        categories(id, name), profiles(user_id, avatar, display_name, first_name, last_name)`
     )
     .eq("id", params.event_id!)
     .maybeSingle();
@@ -56,8 +56,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       error,
       status,
       statusText,
-      owner:
-        authorization.session.get("user_id") === event?.event_owner?.user_id,
+      owner: authorization.session.get("user_id") === event?.profiles?.user_id,
     },
     { headers: { "Set-Cookie": await commitSession(authorization.session) } }
   );
@@ -135,9 +134,9 @@ function ViewEvent() {
               </dl>
             </div>
             <div className="md:mt-3 lg:mt-0">
-              {event.event_owner?.avatar ? (
+              {event.profiles?.avatar ? (
                 <img
-                  src={event.event_owner.avatar}
+                  src={event.profiles.avatar}
                   alt={`${event.name}_owner_avatar`}
                   ref={avatarRef}
                   className="w-24 h-24 mx-auto object-cover rounded-full"
@@ -149,7 +148,7 @@ function ViewEvent() {
                 />
               )}
               <h5 className="text-center mt-3 text-primary-700 font-bold text-lg">
-                {`${event.event_owner?.first_name} ${event.event_owner?.last_name}`}
+                {`${event.profiles?.first_name} ${event.profiles?.last_name}`}
               </h5>
               <Button
                 className="mx-auto block mt-2"
