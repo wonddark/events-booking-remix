@@ -28,8 +28,8 @@ export type EventElement = Pick<
   | "end_date"
 > & {
   categories: Database["public"]["Tables"]["categories"]["Row"] | null;
-  event_owner: Pick<
-    Database["public"]["Views"]["event_owner"]["Row"],
+  profiles: Pick<
+    Database["public"]["Tables"]["profiles"]["Row"],
     "user_id" | "avatar" | "display_name"
   > | null;
 };
