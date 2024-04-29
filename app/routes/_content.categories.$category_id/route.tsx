@@ -4,7 +4,7 @@ import { useLoaderData } from "@remix-run/react";
 import NotFoundError from "~/components/NotFoundError";
 import { faFolderTree } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import CategoryEvents from "~/components/CategoryEvents";
+import EventsGrid from "~/components/EventsGrid";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const dbClient = createDBClient({ request });
@@ -27,7 +27,7 @@ function CategoryPage() {
             <FontAwesomeIcon icon={faFolderTree} className="mr-2" />
             {data.name}
           </h2>
-          <CategoryEvents categoryId={data.id} />
+          <EventsGrid categoryId={data.id} />
         </>
       ) : (
         <NotFoundError />
