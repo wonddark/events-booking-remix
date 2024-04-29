@@ -12,7 +12,6 @@ import {
   useRouteError,
 } from "@remix-run/react";
 import stylesheet from "~/styles/app.css";
-import "flowbite";
 import { useEffect } from "react";
 import ServerError from "~/components/ServerError";
 import NotFoundError from "~/components/NotFoundError";
