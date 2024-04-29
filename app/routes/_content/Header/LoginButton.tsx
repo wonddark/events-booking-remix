@@ -1,22 +1,17 @@
-import { useNavigate } from "@remix-run/react";
-import { Button } from "antd";
+import { Link } from "@remix-run/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightToBracket } from "@fortawesome/free-solid-svg-icons";
 
 function LoginButton() {
-  //
-  const navigate = useNavigate();
-  const goLogin = () => {
-    navigate("/login");
-  };
-  //
   return (
-    <Button
-      onClick={goLogin}
-      icon={<FontAwesomeIcon icon={faArrowRightToBracket} />}
+    <Link
+      to="/login"
+      className="flex items-center justify-start gap-2 h-8"
+      role="button"
     >
-      Login
-    </Button>
+      <FontAwesomeIcon icon={faArrowRightToBracket} />
+      <span>Login</span>
+    </Link>
   );
 }
 
