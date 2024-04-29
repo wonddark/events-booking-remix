@@ -88,6 +88,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const formData = await request.formData();
 
   const payload: Database["public"]["Tables"]["events"]["Insert"] = {
+    user_id: "",
     category_id: formData.get("category_id") as string,
     name: formData.get("name") as string,
     description: formData.get("description") as string,
