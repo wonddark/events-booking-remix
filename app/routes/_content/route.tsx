@@ -16,7 +16,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const authorization = await setAuthorization(request, dbClient);
 
   let userId: string | undefined = undefined;
-  let userDisplayImage: string | undefined | null = undefined;
+  let userDisplayImage: string | undefined;
   if (
     !authorization.error &&
     Object.keys(authorization.session.data).length > 0
@@ -29,7 +29,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         .eq("user_id", data.user.id)
         .single();
       userId = data.user.id;
-      userDisplayImage = profile?.display_name;
+      userDisplayImage = profile?.display_name ?? undefined;
     }
   }
   const url = new URL(request.url);
