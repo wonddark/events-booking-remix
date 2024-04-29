@@ -1,5 +1,4 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
 import createDBClient from "~/utils/supabase/server";
 import * as process from "node:process";
 import { setAuthorization } from "~/utils/session";
@@ -36,28 +35,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
     dbInstance.eq("category_id", categoryId);
   }
 
-  const { data: events, error, count } = await dbInstance;
-  if (error) {
-    return json(
-      {
-        events: [],
-        count: 0,
-        userId: authorization.session.data.user_id,
-      },
-      {
-        status: 500,
-        headers: { "Set-Cookie": await commitSession(authorization.session) },
-      }
-    );
-  }
+  const { data: events, error, status } = await dbInstance;
+
   return json(
-    { events, count, userId: authorization.session.data.user_id },
-    { headers: { "Set-Cookie": await commitSession(authorization.session) } }
+    { events: events ?? [], userId: authorization.session.data.user_id, error },
+    {
+      status,
+      headers: { "Set-Cookie": await commitSession(authorization.session) },
+    }
   );
 }
 
 export default function Events() {
-  const { events, userId } = useLoaderData<typeof loader>();
-
-  return <EventsGrid events={events} userId={userId} />;
+  return <EventsGrid />;
 }
