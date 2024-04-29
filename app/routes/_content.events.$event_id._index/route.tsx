@@ -11,12 +11,12 @@ import { Button, Image } from "antd";
 import dayjs from "dayjs";
 import {
   faCircleUser,
-  faComments,
   faFolderTree,
   faPenToSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import NotFoundError from "~/components/NotFoundError";
+import BtnContactWithHost from "~/components/BtnContactWithHost";
 
 // noinspection JSUnusedGlobalSymbols
 export const handle = {
@@ -126,30 +126,27 @@ function ViewEvent() {
                 </dd>
               </dl>
             </div>
-            <div className="md:mt-3 lg:mt-0">
-              {event.profiles?.avatar ? (
-                <img
-                  src={event.profiles.avatar}
-                  alt={`${event.name}_owner_avatar`}
-                  ref={avatarRef}
-                  className="w-24 h-24 mx-auto object-cover rounded-full"
-                />
-              ) : (
-                <FontAwesomeIcon
-                  icon={faCircleUser}
-                  className="w-24 h-24 mx-auto block"
-                />
-              )}
-              <h5 className="text-center mt-3 text-primary-700 font-bold text-lg">
-                {`${event.profiles?.first_name} ${event.profiles?.last_name}`}
-              </h5>
-              <Button
-                className="mx-auto block mt-2"
-                icon={<FontAwesomeIcon icon={faComments} />}
-              >
-                Contact the host
-              </Button>
-            </div>
+            {event.profiles && (
+              <div className="md:mt-3 lg:mt-0">
+                {event.profiles.avatar ? (
+                  <img
+                    src={event.profiles.avatar}
+                    alt={`${event.name}_owner_avatar`}
+                    ref={avatarRef}
+                    className="w-24 h-24 mx-auto object-cover rounded-full"
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faCircleUser}
+                    className="w-24 h-24 mx-auto block"
+                  />
+                )}
+                <h5 className="text-center mt-3 text-primary-700 font-bold text-lg">
+                  {`${event.profiles.first_name} ${event.profiles.last_name}`}
+                </h5>
+                <BtnContactWithHost host={event.profiles} />
+              </div>
+            )}
           </div>
         </>
       ) : (
