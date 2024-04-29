@@ -1,10 +1,26 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import createDBClient from "~/utils/supabase/server";
-import { useLoaderData } from "@remix-run/react";
+import { UIMatch, useLoaderData } from "@remix-run/react";
 import NotFoundError from "~/components/NotFoundError";
 import { faFolderTree } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import EventsGrid from "~/components/EventsGrid";
+import BreadcrumbsPlain from "~/components/BreadcrumbsPlain";
+import BreadcrumbsLink from "~/components/BreadcrumbsLink";
+
+// noinspection JSUnusedGlobalSymbols
+export const handle = {
+  breadcrumbs: (match: UIMatch, currentPath: boolean) => {
+    const name = (match.data as { data: { name: string } })?.data?.name;
+    if (currentPath) {
+      return <BreadcrumbsPlain key={match.id} name={name} />;
+    } else {
+      return (
+        <BreadcrumbsLink key={match.id} name={name} uri={match.pathname} />
+      );
+    }
+  },
+};
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const dbClient = createDBClient({ request });
