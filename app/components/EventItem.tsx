@@ -84,6 +84,7 @@ function EventItem({ event, userId }: Props) {
                  border border-[#d9d9d9] text-[rgba(0, 0, 0, 0.88)] shadow-[0_2px_0_rgba(0,0,0,0.02)] font-normal
                   leading-[1.5714285714285714] text-[0.875rem] bg-white transition-all duration-[0.2s]
                    ease-[cubic-bezier(0.645,0.045,0.355,1)] hover:text-[#28a193] hover:border-[#28a193] w-fit"
+          preventScrollReset={false}
         >
           <FontAwesomeIcon
             icon={faFolderTree}
