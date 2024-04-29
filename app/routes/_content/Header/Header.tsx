@@ -2,9 +2,6 @@ import { Link, useLocation } from "@remix-run/react";
 import LoginButton from "~/routes/_content/Header/LoginButton";
 import CreateEventButton from "~/routes/_content/Header/CreateEventButton";
 import BtnSaveEvent from "~/components/BtnSaveEvent";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
-import { Button } from "antd";
 import MenuButton from "~/components/MenuButton";
 
 type Props = Readonly<{
@@ -64,14 +61,7 @@ function Header({ query, userId, userDisplayName }: Props) {
           {!userId && <LoginButton />}
           {!pathCreateOrEdit && <CreateEventButton />}
           {pathCreateOrEdit && <BtnSaveEvent />}
-          {userDisplayName && (
-            <Button
-              href={`/profiles/${userDisplayName}`}
-              icon={<FontAwesomeIcon icon={faCircleUser} />}
-              shape="circle"
-            />
-          )}
-          <MenuButton userId={userId} />
+          <MenuButton userId={userId} displayName={userDisplayName} />
         </div>
       </div>
     </header>
