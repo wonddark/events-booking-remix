@@ -7,7 +7,7 @@ import { setAuthorization } from "~/utils/session";
 import ButtonDeleteEvent from "~/components/ButtonDeleteEvent";
 import { commitSession } from "~/sessions";
 import { useRef } from "react";
-import { Button } from "antd";
+import { Button, Image } from "antd";
 import dayjs from "dayjs";
 import {
   faCircleUser,
@@ -64,25 +64,18 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 function ViewEvent() {
   const { event, owner } = useLoaderData<typeof loader>();
-  const imgRef = useRef<HTMLImageElement>(null);
   const avatarRef = useRef<HTMLImageElement>(null);
   return (
     <section>
       {event ? (
         <>
           <div className="w-full h-36 lg:h-64 relative">
-            <img
-              className="w-full h-full object-cover rounded-lg"
-              src={
-                event?.img_url
-                  ? event.img_url
-                  : "/images/event_image_placeholder.jpg"
-              }
-              onError={() =>
-                (imgRef.current!.src = "/images/event_image_placeholder.jpg")
-              }
-              ref={imgRef}
-              alt={event?.name ?? "event"}
+            <Image
+              src={event?.img_url ?? undefined}
+              fallback="/images/event_image_placeholder.jpg"
+              width="100%"
+              height="100%"
+              className="object-cover rounded-lg"
             />
             {owner && (
               <div className="flex gap-1.5 absolute top-0 right-0 z-10 mt-2 mr-2">
