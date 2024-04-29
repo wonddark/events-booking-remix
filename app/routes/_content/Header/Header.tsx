@@ -1,5 +1,4 @@
 import { Link, useLocation } from "@remix-run/react";
-import LoginButton from "~/routes/_content/Header/LoginButton";
 import CreateEventButton from "~/routes/_content/Header/CreateEventButton";
 import BtnSaveEvent from "~/components/BtnSaveEvent";
 import MenuButton from "~/components/MenuButton";
@@ -7,7 +6,7 @@ import MenuButton from "~/components/MenuButton";
 type Props = Readonly<{
   query: string | null;
   userId: string | undefined;
-  userDisplayName: string | undefined | null;
+  userDisplayName: string | undefined;
 }>;
 
 function Header({ query, userId, userDisplayName }: Props) {
@@ -52,13 +51,14 @@ function Header({ query, userId, userDisplayName }: Props) {
           </form>
         </div>
         <div className="flex items-center gap-x-2 grow-0 order-2 md:order-last">
-          <Link
-            to="/events"
-            className="h-8 py-1 px-3.5 text-teal-500 hover:brightness-125 font-bold hidden md:inline-block"
-          >
-            Events
-          </Link>
-          {!userId && <LoginButton />}
+          {!pathCreateOrEdit && (
+            <Link
+              to="/events"
+              className="h-8 py-1 px-3.5 text-white hover:text-gray-200 font-bold hidden md:inline-block"
+            >
+              Events
+            </Link>
+          )}
           {!pathCreateOrEdit && <CreateEventButton />}
           {pathCreateOrEdit && <BtnSaveEvent />}
           <MenuButton userId={userId} displayName={userDisplayName} />
