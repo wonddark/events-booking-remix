@@ -28,11 +28,11 @@ function BtnSaveEvent() {
         if (pathname === "/events/create") {
           data.append(
             "published_at",
-            dayjs().format("YYYY-MM-DD HH:mm:ss.sss")
+            dayjs().format("YYYY-MM-DD HH:mm:ss.sssZZ")
           );
         }
-        data.append("updated_at", dayjs().format("YYYY-MM-DD HH:mm:ss.sss"));
-        saveEvent.submit(data, { action: actionSave });
+        data.append("updated_at", dayjs().format("YYYY-MM-DD HH:mm:ss.sssZZ"));
+        saveEvent.submit(data, { action: actionSave, method: "POST" });
       }}
     >
       Save event
