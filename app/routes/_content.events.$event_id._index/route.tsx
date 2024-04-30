@@ -6,7 +6,6 @@ import BreadcrumbsPlain from "~/components/BreadcrumbsPlain";
 import { setAuthorization } from "~/utils/session";
 import ButtonDeleteEvent from "~/components/ButtonDeleteEvent";
 import { commitSession } from "~/sessions";
-import { useRef } from "react";
 import { Button, Image } from "antd";
 import dayjs from "dayjs";
 import {
@@ -64,7 +63,6 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 function ViewEvent() {
   const { event, owner } = useLoaderData<typeof loader>();
-  const avatarRef = useRef<HTMLImageElement>(null);
   return (
     <section>
       {event ? (
@@ -128,21 +126,31 @@ function ViewEvent() {
             </div>
             {event.profiles && (
               <div className="md:mt-3 lg:mt-0">
-                {event.profiles.avatar ? (
-                  <img
-                    src={event.profiles.avatar}
-                    alt={`${event.name}_owner_avatar`}
-                    ref={avatarRef}
-                    className="w-24 h-24 mx-auto object-cover rounded-full"
-                  />
-                ) : (
-                  <FontAwesomeIcon
-                    icon={faCircleUser}
-                    className="w-24 h-24 mx-auto block"
-                  />
-                )}
+                <Link
+                  to={`/profiles/${event.profiles.display_name}`}
+                  className="block mx-auto w-fit"
+                >
+                  {event.profiles.avatar ? (
+                    <Image
+                      src={event.profiles.avatar ?? undefined}
+                      alt={`${event.profiles.display_name} avatar`}
+                      fallback="/images/user_avatar_placeholder.jpeg"
+                      width="6rem"
+                      height="6rem"
+                      className="object-cover rounded-full"
+                      preview={false}
+                    />
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={faCircleUser}
+                      className="w-24 h-24 mx-auto block"
+                    />
+                  )}
+                </Link>
                 <h5 className="text-center mt-3 text-primary-700 font-bold text-lg">
-                  {`${event.profiles.first_name} ${event.profiles.last_name}`}
+                  <Link to={`/profiles/${event.profiles.display_name}`}>
+                    {`${event.profiles.first_name} ${event.profiles.last_name}`}
+                  </Link>
                 </h5>
                 <BtnContactWithHost host={event.profiles} />
               </div>
