@@ -12,9 +12,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .select("count")
     .gt(
       "published_at",
-      dayjs(referenceDate)
-        .subtract(72, "hours")
-        .format("YYYY-MM-DD HH:mm:ss.sss")
+      dayjs(referenceDate).subtract(72, "hours").format("YYYY-MM-DD HH:mm:ss")
     )
     .single();
 
