@@ -15,7 +15,6 @@ import BreadcrumbsLink from "~/components/BreadcrumbsLink";
 import BreadcrumbsPlain from "~/components/BreadcrumbsPlain";
 import { Database } from "../../../database.types";
 import { useEffect } from "react";
-import dayjs from "dayjs";
 import { commitSession, destroySession } from "~/sessions";
 import { setAuthorization } from "~/utils/session";
 import EventForm from "~/components/EventForm";
@@ -93,16 +92,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
     name: formData.get("name") as string,
     description: formData.get("description") as string,
     img_url: formData.get("img_url") as string,
-    end_date: dayjs(formData.get("end_date") as string).format(
-      "YYYY-MM-DD HH:mm:ss.sss"
-    ),
+    end_date: formData.get("end_date") as string,
     max_attendees: Number(formData.get("max_attendees")),
-    start_date: dayjs(formData.get("start_date") as string).format(
-      "YYYY-MM-DD HH:mm:ss.sss"
-    ),
-    updated_at: dayjs(formData.get("updated_at") as string).format(
-      "YYYY-MM-DD HH:mm:ss.sss"
-    ),
+    start_date: formData.get("start_date") as string,
+    updated_at: formData.get("updated_at") as string,
   };
 
   const {
