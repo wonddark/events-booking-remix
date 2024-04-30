@@ -25,9 +25,14 @@ function BtnSaveEvent() {
       onClick={(e) => {
         e.preventDefault();
         const data = new FormData(btnRef.current!.form ?? undefined);
-        data.append("published_at", dayjs().format("YYYY-MM-DD HH:mm:ss.sss"));
-        console.log(dayjs().format("YYYY-MM-DD HH:mm:ss.sss"));
-        // saveEvent.submit(data, { action: actionSave });
+        if (pathname === "/events/create") {
+          data.append(
+            "published_at",
+            dayjs().format("YYYY-MM-DD HH:mm:ss.sss")
+          );
+        }
+        data.append("updated_at", dayjs().format("YYYY-MM-DD HH:mm:ss.sss"));
+        saveEvent.submit(data, { action: actionSave });
       }}
     >
       Save event

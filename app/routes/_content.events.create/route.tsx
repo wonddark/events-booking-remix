@@ -65,6 +65,9 @@ export async function action({ request }: ActionFunctionArgs) {
     start_date: dayjs(formData.get("start_date") as string).format(
       "YYYY-MM-DD HH:mm:ss.sss"
     ),
+    published_at: dayjs(formData.get("published_at") as string).format(
+      "YYYY-MM-DD HH:mm:ss.sss"
+    ),
   };
 
   const {
