@@ -3,6 +3,7 @@ import { Button } from "antd";
 import { useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import dayjs from "dayjs";
 
 function BtnSaveEvent() {
   const saveEvent = useFetcher();
@@ -23,7 +24,10 @@ function BtnSaveEvent() {
       ref={btnRef}
       onClick={(e) => {
         e.preventDefault();
-        saveEvent.submit(btnRef.current!.form, { action: actionSave });
+        const data = new FormData(btnRef.current!.form ?? undefined);
+        data.append("published_at", dayjs().format("YYYY-MM-DD HH:mm:ss.sss"));
+        console.log(data);
+        // saveEvent.submit(data, { action: actionSave });
       }}
     >
       Save event
