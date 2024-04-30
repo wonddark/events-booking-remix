@@ -23,7 +23,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .from("events")
     .select(
       `id, img_url, name, tickets_count, max_attendees, start_date, end_date, categories(id, name),
-        profiles(user_id, avatar, display_name)`
+        published_at, updated_at, profiles(user_id, avatar, display_name)`
     )
     .order("published_at", { ascending: false })
     .range((page - 1) * page_size, page * page_size - 1);
