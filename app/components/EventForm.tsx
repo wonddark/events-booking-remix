@@ -15,6 +15,8 @@ type Props = Readonly<{
 
 function EventForm({ event }: Props) {
   const inputCategoryRef = useRef<HTMLInputElement>(null);
+  const startDateRef = useRef<HTMLInputElement>(null);
+  const endDateRef = useRef<HTMLInputElement>(null);
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
       <Form
@@ -65,26 +67,36 @@ function EventForm({ event }: Props) {
         <div className="w-full">
           <label htmlFor="event_start_date" className="text-primary-950">
             Starting at{" "}
+            <input type="text" hidden name="start_date" ref={startDateRef} />
             <DatePicker
               format="YYYY-MM-DD HH:mm:ss"
               showTime={{ defaultValue: dayjs("09:00:00", "HH:mm:ss") }}
-              name="start_date"
               className="rounded-lg py-1.5 px-3.5 w-full"
               defaultValue={dayjs(event?.start_date)}
+              onChange={(e) => {
+                startDateRef.current!.value = dayjs(e).format(
+                  "YYYY-MM-DD HH:mm:ss.sssZZ"
+                );
+              }}
             />
           </label>
         </div>
         <div className="w-full">
           <label htmlFor="event_end_date" className="text-primary-950">
             Ending at{" "}
+            <input type="text" hidden name="end_date" ref={endDateRef} />
             <DatePicker
               format="YYYY-MM-DD HH:mm:ss"
               // disabledDate={disabledDate}
               // disabledTime={disabledDateTime}
               showTime={{ defaultValue: dayjs("10:00:00", "HH:mm:ss") }}
-              name="end_date"
               className="rounded-lg py-1.5 px-3.5 w-full"
               defaultValue={dayjs(event?.end_date)}
+              onChange={(e) => {
+                endDateRef.current!.value = dayjs(e).format(
+                  "YYYY-MM-DD HH:mm:ss.sssZZ"
+                );
+              }}
             />
           </label>
         </div>
