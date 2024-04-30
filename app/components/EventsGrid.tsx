@@ -20,7 +20,7 @@ function EventsGrid({ categoryId, userId }: Readonly<EventsGridProps>) {
     searchParams.set("category_id", categoryId);
   }
   if (userId) {
-    searchParams.set("user_idd", userId);
+    searchParams.set("user_id", userId);
   }
 
   useEffect(() => {
