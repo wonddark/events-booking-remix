@@ -13,7 +13,7 @@ function HomeStatics() {
 
   useEffect(() => {
     const referenceDate = `reference_date=${dayjs().format(
-      "YYYY-MM-DD HH:mm:ss.sss"
+      "YYYY-MM-DD HH:mm:ss.sssZZ"
     )}`;
     recentEvents.load(`/statics/recent_events?${referenceDate}`);
     soonEvents.load(`/statics/soon_events?${referenceDate}`);
