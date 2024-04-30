@@ -1,6 +1,6 @@
 import React, { RefObject, useEffect, useMemo, useRef, useState } from "react";
 import { useFetcher } from "@remix-run/react";
-import { action as categoriesAction } from "~/routes/_content.categories/route";
+import { action as categoriesAction } from "~/routes/_content.categories.filter/route";
 import type { SelectProps } from "antd";
 import { Select, Spin } from "antd";
 import debounce from "lodash.debounce";
@@ -74,7 +74,7 @@ function CategorySelector({
   const newFetch = (query: string) => {
     const formData = new FormData();
     formData.append("category_name", query);
-    return fetch(`${document.location.origin}/categories`, {
+    return fetch(`${document.location.origin}/categories/filter`, {
       method: "POST",
       body: formData,
     })
@@ -96,7 +96,10 @@ function CategorySelector({
   useEffect(() => {
     const formData = new FormData();
     formData.append("category_name", defaultValue);
-    categories.submit(formData, { action: "/categories", method: "POST" });
+    categories.submit(formData, {
+      action: "/categories/filter",
+      method: "POST",
+    });
   }, [defaultValue]);
 
   return (
