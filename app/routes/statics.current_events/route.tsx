@@ -4,8 +4,10 @@ import dayjs from "dayjs";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const dbClient = createDBClient({ request });
+  const url = new URL(request.url);
+  const referenceDate = url.searchParams.get("reference_date");
 
-  const today = dayjs().format("YYYY-MM-DD HH:mm:ss.sss");
+  const today = dayjs(referenceDate).format("YYYY-MM-DD HH:mm:ss.sss");
 
   const { data, error, status } = await dbClient
     .from("events")

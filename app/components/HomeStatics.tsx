@@ -4,6 +4,7 @@ import { loader as loaderRecentEvents } from "~/routes/statics.recent_events/rou
 import { loader as loaderSoonEvents } from "~/routes/statics.soon_events/route";
 import { loader as loaderCurrentEvents } from "~/routes/statics.current_events/route";
 import { useEffect } from "react";
+import dayjs from "dayjs";
 
 function HomeStatics() {
   const recentEvents = useFetcher<typeof loaderRecentEvents>();
@@ -11,9 +12,12 @@ function HomeStatics() {
   const currentEvents = useFetcher<typeof loaderCurrentEvents>();
 
   useEffect(() => {
-    recentEvents.load("/statics/recent_events");
-    soonEvents.load("/statics/soon_events");
-    currentEvents.load("/statics/current_events");
+    const referenceDate = `reference_date=${dayjs().format(
+      "YYYY-MM-DD HH:mm:ss.sss"
+    )}`;
+    recentEvents.load(`/statics/recent_events?${referenceDate}`);
+    soonEvents.load(`/statics/soon_events?${referenceDate}`);
+    currentEvents.load(`/statics/current_events?${referenceDate}`);
   }, []);
 
   return (

@@ -4,13 +4,17 @@ import dayjs from "dayjs";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const dbClient = createDBClient({ request });
+  const url = new URL(request.url);
+  const referenceDate = url.searchParams.get("reference_date");
 
   const { data, error, status } = await dbClient
     .from("events")
     .select("count")
     .gt(
       "published_at",
-      dayjs().subtract(72, "hours").format("YYYY-MM-DD HH:mm:ss.sss")
+      dayjs(referenceDate)
+        .subtract(72, "hours")
+        .format("YYYY-MM-DD HH:mm:ss.sss")
     )
     .single();
 
