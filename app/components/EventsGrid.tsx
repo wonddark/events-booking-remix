@@ -8,15 +8,19 @@ import InfiniteScroller from "~/components/InfiniteScroller";
 
 interface EventsGridProps {
   categoryId?: string;
+  userId?: string;
 }
 
-function EventsGrid({ categoryId }: Readonly<EventsGridProps>) {
+function EventsGrid({ categoryId, userId }: Readonly<EventsGridProps>) {
   const fetcher = useFetcher<typeof loader>();
   const [items, setItems] = useState<EventElement[]>([]);
   const [page, setPage] = useState(0);
   const [searchParams] = useSearchParams();
   if (categoryId) {
     searchParams.set("category_id", categoryId);
+  }
+  if (userId) {
+    searchParams.set("user_idd", userId);
   }
 
   useEffect(() => {
