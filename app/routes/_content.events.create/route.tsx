@@ -11,7 +11,6 @@ import { setAuthorization } from "~/utils/session";
 import BreadcrumbsPlain from "~/components/BreadcrumbsPlain";
 import { commitSession, destroySession } from "~/sessions";
 import EventForm from "~/components/EventForm";
-import dayjs from "dayjs";
 
 // noinspection JSUnusedGlobalSymbols
 export const handle = {
@@ -52,22 +51,16 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const formData = await request.formData();
 
+  // @ts-ignore
   const payload: Database["public"]["Tables"]["events"]["Insert"] = {
-    user_id: "",
     category_id: formData.get("category_id") as string,
     name: formData.get("name") as string,
     description: formData.get("description") as string,
     img_url: formData.get("img_url") as string,
-    end_date: dayjs(formData.get("end_date") as string).format(
-      "YYYY-MM-DD HH:mm:ss.sss"
-    ),
+    end_date: formData.get("end_date") as string,
     max_attendees: Number(formData.get("max_attendees")),
-    start_date: dayjs(formData.get("start_date") as string).format(
-      "YYYY-MM-DD HH:mm:ss.sss"
-    ),
-    published_at: dayjs(formData.get("published_at") as string).format(
-      "YYYY-MM-DD HH:mm:ss.sss"
-    ),
+    start_date: formData.get("start_date") as string,
+    published_at: formData.get("published_at") as string,
   };
 
   const {
