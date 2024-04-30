@@ -26,6 +26,8 @@ export type EventElement = Pick<
   | "max_attendees"
   | "start_date"
   | "end_date"
+  | "published_at"
+  | "updated_at"
 > & {
   categories: Database["public"]["Tables"]["categories"]["Row"] | null;
   profiles: Pick<
