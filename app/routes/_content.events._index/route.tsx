@@ -14,6 +14,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const page_size = Number(
     searchParams.get("page_size") ?? process.env.DEFAULT_PAGE_SIZE
   );
+  const userId = searchParams.get("user_id");
 
   const dbClient = createDBClient({ request });
   const authorization = await setAuthorization(request, dbClient);
@@ -33,6 +34,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   if (categoryId) {
     dbInstance.eq("category_id", categoryId);
+  }
+
+  if (userId) {
+    dbInstance.eq("user_id", userId);
   }
 
   const { data: events, error, status } = await dbInstance;
