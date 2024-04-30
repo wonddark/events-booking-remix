@@ -54,7 +54,7 @@ function ContentLayout() {
         userId={userId}
         userDisplayName={userDisplayImage}
       />
-      <div className="max-w-screen-2xl mx-auto px-2.5 lg:px-5 w-full my-2.5 text-xs font-light">
+      <div className="max-w-screen-2xl mx-auto px-2.5 lg:px-5 w-full my-5 text-xs font-light">
         {matches
           .filter((item) => item.handle)
           .map((item) =>

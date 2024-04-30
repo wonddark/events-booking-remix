@@ -39,7 +39,7 @@ function CategoryPage() {
     <section>
       {data ? (
         <>
-          <h2 className="text-2xl font-bold mb-3">
+          <h2 className="text-2xl font-bold mb-5">
             <FontAwesomeIcon icon={faFolderTree} className="mr-2" />
             {data.name}
           </h2>
