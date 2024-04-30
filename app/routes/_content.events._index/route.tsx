@@ -15,6 +15,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     searchParams.get("page_size") ?? process.env.DEFAULT_PAGE_SIZE
   );
   const userId = searchParams.get("user_id");
+  const sortBy = searchParams.get("sort_by");
+  const sortOrder = searchParams.get("sort_order");
+  const eventStatus = searchParams.get("status");
+  const referenceDate = searchParams.get("reference_date");
 
   const dbClient = createDBClient({ request });
   const authorization = await setAuthorization(request, dbClient);
@@ -25,7 +29,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       `id, img_url, name, tickets_count, max_attendees, start_date, end_date, categories(id, name),
         published_at, updated_at, profiles(user_id, avatar, display_name)`
     )
-    .order("published_at", { ascending: false })
+    .order(sortBy ?? "published_at", { ascending: sortOrder === "DESC" })
     .range((page - 1) * page_size, page * page_size - 1);
 
   if (query) {
@@ -38,6 +42,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   if (userId) {
     dbInstance.eq("user_id", userId);
+  }
+
+  switch (eventStatus) {
+    case "ended":
+      dbInstance.lt("end_date", referenceDate);
+      break;
+    case "running":
+      dbInstance.lt("start_date", referenceDate).gt("end_date", referenceDate);
+      break;
+    case "pending":
+      dbInstance.gt("start_date", referenceDate);
+      break;
+    default:
+      break;
   }
 
   const { data: events, error, status } = await dbInstance;

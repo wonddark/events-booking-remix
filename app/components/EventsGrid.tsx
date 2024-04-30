@@ -2,9 +2,10 @@ import EventItem from "~/components/EventItem";
 import { EventElement } from "~/types/events";
 import NoResults from "~/components/NoResults";
 import { useEffect, useState } from "react";
-import { useFetcher, useSearchParams } from "@remix-run/react";
+import { useFetcher, useLoaderData, useSearchParams } from "@remix-run/react";
 import { loader } from "~/routes/_content.events._index/route";
 import InfiniteScroller from "~/components/InfiniteScroller";
+import Filters from "~/components/Filters";
 
 interface EventsGridProps {
   categoryId?: string;
@@ -12,21 +13,17 @@ interface EventsGridProps {
 }
 
 function EventsGrid({ categoryId, userId }: Readonly<EventsGridProps>) {
+  const { events, userId: loggedUser } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof loader>();
   const [items, setItems] = useState<EventElement[]>([]);
   const [page, setPage] = useState(0);
   const [thereAreMore, setThereAreMore] = useState<boolean>(true);
   const [searchParams] = useSearchParams();
-  if (categoryId) {
-    searchParams.set("category_id", categoryId);
-  }
-  if (userId) {
-    searchParams.set("user_id", userId);
-  }
 
   useEffect(() => {
-    fetcher.load(`/events?index&${searchParams}`);
-  }, []);
+    setItems(events);
+    setPage(1);
+  }, [events]);
 
   useEffect(() => {
     if (!fetcher.data || fetcher.state === "loading") {
@@ -45,6 +42,7 @@ function EventsGrid({ categoryId, userId }: Readonly<EventsGridProps>) {
 
   return (
     <>
+      <Filters categoryId={categoryId} userId={userId} />
       <InfiniteScroller
         loadNext={() => {
           if (fetcher.state !== "loading" && thereAreMore) {
@@ -56,11 +54,7 @@ function EventsGrid({ categoryId, userId }: Readonly<EventsGridProps>) {
       >
         <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5 justify-items-center">
           {items.map((item) => (
-            <EventItem
-              event={item}
-              key={item.id}
-              userId={fetcher.data?.userId}
-            />
+            <EventItem event={item} key={item.id} userId={loggedUser} />
           ))}
         </div>
       </InfiniteScroller>
