@@ -15,6 +15,7 @@ function EventsGrid({ categoryId, userId }: Readonly<EventsGridProps>) {
   const fetcher = useFetcher<typeof loader>();
   const [items, setItems] = useState<EventElement[]>([]);
   const [page, setPage] = useState(0);
+  const [thereAreMore, setThereAreMore] = useState<boolean>(true);
   const [searchParams] = useSearchParams();
   if (categoryId) {
     searchParams.set("category_id", categoryId);
@@ -36,6 +37,9 @@ function EventsGrid({ categoryId, userId }: Readonly<EventsGridProps>) {
       const newItems = fetcher.data.events;
       setItems((prevAssets) => [...prevAssets, ...newItems]);
       setPage(page + 1);
+      if (fetcher.data.events.length === 0) {
+        setThereAreMore(false);
+      }
     }
   }, [fetcher.data]);
 
@@ -43,7 +47,7 @@ function EventsGrid({ categoryId, userId }: Readonly<EventsGridProps>) {
     <>
       <InfiniteScroller
         loadNext={() => {
-          if (fetcher.state !== "loading") {
+          if (fetcher.state !== "loading" && thereAreMore) {
             const query = `/events?index&page=${page + 1}&${searchParams}`;
             fetcher.load(query);
           }
