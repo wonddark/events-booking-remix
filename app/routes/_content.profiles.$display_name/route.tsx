@@ -3,9 +3,10 @@ import createDBClient from "~/utils/supabase/server";
 import { setAuthorization } from "~/utils/session";
 import { commitSession, destroySession } from "~/sessions";
 import { UIMatch, useLoaderData } from "@remix-run/react";
-import { Image } from "antd";
+import { Image, Tabs } from "antd";
 import BreadcrumbsPlain from "~/components/BreadcrumbsPlain";
 import BreadcrumbsLink from "~/components/BreadcrumbsLink";
+import EventsGrid from "~/components/EventsGrid";
 
 // noinspection JSUnusedGlobalSymbols
 export const handle = {
@@ -64,6 +65,15 @@ function UserProfiles() {
           <h1>
             {data.first_name} {data.last_name}
           </h1>
+          <Tabs
+            items={[
+              {
+                label: "Events",
+                key: "events",
+                children: <EventsGrid userId={data.user_id} />,
+              },
+            ]}
+          />
         </>
       ) : (
         <h1>The requested user doesn't seems to exist</h1>
