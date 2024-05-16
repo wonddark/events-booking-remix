@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+    transition-duration: 350ms;
+}
+
+svg, path {
+    transition-duration: 0ms;
+}
+
 .lds-ripple,
 .lds-ripple div {
     box-sizing: border-box;
