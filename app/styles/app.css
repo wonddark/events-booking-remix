@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-    transition-duration: 350ms;
+img, button, a  {
+    transition-duration: 500ms;
 }
 
 svg, path {
@@ -14,26 +14,31 @@ svg, path {
 .lds-ripple div {
     box-sizing: border-box;
 }
+
 .lds-ripple {
     display: inline-block;
     position: relative;
     width: 200px;
     height: 200px;
 }
+
 .lds-ripple div {
     position: absolute;
-    border: 4px solid currentColor;
+    border: 4px solid currentcolor;
     opacity: 1;
     border-radius: 50%;
     background-color: white;
     animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
 }
+
 .lds-ripple div:nth-child(2) {
     animation-delay: -0.5s;
 }
+
 .lds-ripple div:nth-child(3) {
     animation-delay: -.7s;
 }
+
 @keyframes lds-ripple {
     0% {
         top: 90px;
@@ -42,6 +47,7 @@ svg, path {
         height: 20px;
         opacity: 0;
     }
+
     4.9% {
         top: 90px;
         left: 36px;
@@ -49,6 +55,7 @@ svg, path {
         height: 20px;
         opacity: 0;
     }
+
     5% {
         top: 90px;
         left: 90px;
@@ -56,6 +63,7 @@ svg, path {
         height: 20px;
         opacity: 1;
     }
+
     100% {
         top: 0;
         left: 0;
