@@ -128,20 +128,11 @@ function EventItem({ event, userId }: Props) {
             <span className="text-red-900">No tickets available</span>
           )}
         </div>
-        <div className="mt-7 flex-1 flex justify-start items-end">
-          <Button
-            icon={<FontAwesomeIcon icon={faMagnifyingGlass} size="xs" />}
-            onClick={viewDetails}
-            htmlType="button"
-            type="default"
-            className="w-3/5 mr-0.5"
-          >
-            Details
-          </Button>
+        <div className="mt-7 flex-1 flex flex-col justify-end items-center gap-2">
           <Button
             htmlType="button"
             type="primary"
-            className="w-2/5 ml-0.5"
+            className="w-full ml-0.5"
             onClick={toggleTicketsForm}
             disabled={
               !userId ||
@@ -150,6 +141,15 @@ function EventItem({ event, userId }: Props) {
             }
           >
             Book a sit
+          </Button>
+          <Button
+            icon={<FontAwesomeIcon icon={faMagnifyingGlass} size="xs" />}
+            onClick={viewDetails}
+            htmlType="button"
+            type="default"
+            className="w-full mr-0.5"
+          >
+            Details
           </Button>
         </div>
       </div>
