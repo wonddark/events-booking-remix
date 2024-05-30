@@ -59,7 +59,7 @@ export default function Index() {
             <span className="text-amber-500">memorable adventure</span>
           </p>
           <p className="text-xl md:text-2xl xl:text-3xl font-medium leading-[1.15] tracking-wide">
-            We can help you
+            We can help you keep your most precious memories alive
           </p>
           <a
             href="/events/create"
