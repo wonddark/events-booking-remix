@@ -53,10 +53,13 @@ export default function Index() {
             </ul>
           </nav>
         </header>
-        <div className="flex flex-col gap-8 md:gap-12 mb-[20%] md:mb-[10%] xl:mb-[5%] w-full max-w-screen-2xl mx-auto">
+        <div className="flex flex-col gap-8 md:gap-12 mb-[30%] md:mb-[10%] xl:mb-[5%] w-full max-w-screen-2xl mx-auto">
           <p className="text-3xl md:text-4xl xl:text-6xl font-semibold text-white leading-[1.25] w-[60%] min-w-[300px] max-w-[870px]">
-            With friends every moment is an{" "}
-            <span className="text-amber-500">adventure</span>
+            When shared with friends every moment is a{" "}
+            <span className="text-amber-500">memorable adventure</span>
+          </p>
+          <p className="text-xl md:text-2xl xl:text-3xl font-medium leading-[1.15] tracking-wide">
+            We can help you
           </p>
           <a
             href="/events/create"
