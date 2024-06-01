@@ -10,6 +10,22 @@ svg, path {
     transition-duration: 0ms;
 }
 
+.memorable-header {
+    background: no-repeat radial-gradient(circle at 70% 50%, transparent 47%, #000 69%), no-repeat right/80% url('/images/valiant-made-UrzN-8K1PCE-unsplash.webp');
+}
+
+@media screen and (width <= 500px) {
+    .memorable-header {
+        background: no-repeat radial-gradient(circle at 50% 33%, transparent 23%, #000 36%), no-repeat 49% 16% /177% url('/images/valiant-made-UrzN-8K1PCE-unsplash.webp')
+    }
+}
+
+@media screen and (width > 500px) and (width <=1100px) {
+    .memorable-header {
+        background: no-repeat radial-gradient(ellipse at 70% 43%, transparent 31%, #000 41%), no-repeat 675% 30%/98% url('/images/valiant-made-UrzN-8K1PCE-unsplash.webp');
+    }
+}
+
 .lds-ripple,
 .lds-ripple div {
     box-sizing: border-box;
@@ -72,4 +88,3 @@ svg, path {
         opacity: 0;
     }
 }
-

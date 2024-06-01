@@ -29,9 +29,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function Index() {
   return (
     <>
-      <div className="bg-[url('/images/valiant-made-UrzN-8K1PCE-unsplash.webp')] min-h-screen bg-cover bg-no-repeat bg-center flex flex-col justify-between px-6 md:px-14">
+      <div className="memorable-header min-h-screen bg-cover bg-no-repeat bg-center flex flex-col justify-between px-6 md:px-14">
         <header className="flex justify-between items-center gap-3 py-4 md:py-6 w-full max-w-screen-2xl mx-auto">
-          <span className="bg-gradient-to-b from-amber-700 to-amber-300 bg-clip-text text-transparent text-2xl md:text-3xl font-semibold">
+          <span className="bg-gradient-to-r from-amber-700 to-amber-300 bg-clip-text text-transparent text-2xl md:text-3xl font-semibold">
             EventsBooking
           </span>
           <nav className="flex-1 hidden md:flex justify-end">
